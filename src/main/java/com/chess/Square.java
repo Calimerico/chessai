@@ -89,7 +89,16 @@ public enum Square {
         return rank;
     }
 
-    public static Square calculateSquareFromCoorinates(int file, int rank) {
-        return Square.values()[8*file+rank];
+    public static Square fromLibSquare(com.github.bhlangonijr.chesslib.Square square) {
+        return Square.calculateSquareFromCoordinates(square.getFile().ordinal(), square.getRank().ordinal());
+    }
+
+    public static Square calculateSquareFromCoordinates(int file, int rank) {
+        int i = 8 * file + rank;
+
+        if (i >= 64 || file > 7 || rank > 7) {
+            return null;
+        }
+        return Square.values()[i];
     }
 }

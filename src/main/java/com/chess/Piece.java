@@ -15,4 +15,8 @@ public class Piece {
     public Set<Move> getLegalMoves(Position position) {
         return PositionLegalMovesService.getLegalMoves(position, square);
     }
+
+    public Set<Square> getAttackingSquares(Position position) {
+        return PositionLegalMovesService.getAttackingSquares(position, square);
+    }
 }
