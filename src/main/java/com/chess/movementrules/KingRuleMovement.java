@@ -14,7 +14,8 @@ public class KingRuleMovement {
                 .stream()
                 .map(square -> new Move(
                         currentSquare,
-                        square
+                        square,
+                        position
                 ))
                 .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position,move))
                 .collect(Collectors.toSet());
