@@ -62,8 +62,9 @@ public class PositionGenerator {
                 case WHITE_ROOK:
                     pieces.put(mySquare, new Piece(Color.WHITE,mySquare, PieceType.ROOK));
                     break;
+                default:
+                    throw new RuntimeException("Piece not recognized: " + piece);
             }
-            throw new RuntimeException("Piece not recognized: " + piece);
         }
 
         return new Position(

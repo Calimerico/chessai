@@ -2,14 +2,16 @@ package com.chess;
 
 import com.ai.Action;
 import com.ai.DummyAction;
+import com.ai.MiniMaxState;
 import com.ai.State;
+import com.github.bhlangonijr.chesslib.Board;
 import lombok.Getter;
 import lombok.Value;
 
 import java.util.*;
 
 @Value
-public class Position implements State {
+public class Position implements MiniMaxState {
     Map<Square, Piece> pieces;
     boolean whiteCanCastleQueenSide;
     boolean whiteCanCastleKingSide;
@@ -18,6 +20,9 @@ public class Position implements State {
     Color playerToMove;
     Move lastPlayedMove;
     Castle isLastMoveCastle;
+    Square whiteKingPosition;
+    Square blackKingPosition;
+    int numberOfPieces;
 
     public Position(Map<Square, Piece> pieces, boolean whiteCanCastleQueenSide, boolean whiteCanCastleKingSide, boolean blackCanCastleQueenSide, boolean blackCanCastleKingSide, Color playerToMove, Move lastPlayedMove, Castle isLastMoveCastle) {
         this.pieces = Collections.unmodifiableMap(pieces);
@@ -28,15 +33,25 @@ public class Position implements State {
         this.playerToMove = playerToMove;
         this.lastPlayedMove = lastPlayedMove;
         this.isLastMoveCastle = isLastMoveCastle;
+        this.whiteKingPosition = Arrays.stream(Square.values()).filter(square -> {
+            Piece piece = pieces.get(square);
+            return piece != null && piece.getColor() == Color.WHITE && piece.getPieceType() == PieceType.KING;
+        }).findFirst().orElseThrow(() -> new RuntimeException("There must be white king on he board! Pieces present: " + pieces));
+        this.blackKingPosition = Arrays.stream(Square.values()).filter(square -> {
+            Piece piece = pieces.get(square);
+            return piece != null && piece.getColor() == Color.BLACK && piece.getPieceType() == PieceType.KING;
+        }).findFirst().orElseThrow(() -> new RuntimeException("There must be black king on he board! Pieces present: " + pieces));
+        this.numberOfPieces = this.pieces.size();
     }
 
     @Override
     public Set<Action> getActions() {
-        Set<Action> moves = new HashSet<>();
+        Set<Action> moves = new TreeSet<>();
         for (Square square : Square.values()) {
             Piece piece = pieces.get(square);
             if (piece != null && piece.getColor() == playerToMove) {
-                moves.addAll(piece.getLegalMoves(this));
+                Set<Move> legalMoves = piece.getLegalMoves(this);
+                moves.addAll(legalMoves);
             }
         }
         return moves;
@@ -52,8 +67,9 @@ public class Position implements State {
         boolean newWhiteCanCastleQueenSide = whiteCanCastleQueenSide;
         boolean newBlackCanCastleKingSide = blackCanCastleKingSide;
         boolean newBlackCanCastleQueenSide = blackCanCastleQueenSide;
-        piecesInNewPosition.put(move.getEndingSquare(), this.pieces.get(startingSquare));
-        piecesInNewPosition.put(startingSquare,null);
+        Piece pieceOnOldSquare = this.pieces.get(startingSquare);
+        piecesInNewPosition.put(move.getEndingSquare(), new Piece(pieceOnOldSquare.getColor(), move.getEndingSquare(), pieceOnOldSquare.getPieceType()));
+        piecesInNewPosition.remove(startingSquare);
         if (startingSquare == Square.E1) {
             //white king moving, loosing right to castle
             newWhiteCanCastleKingSide = false;
@@ -101,22 +117,22 @@ public class Position implements State {
             if (endingSquare == Square.C1) {
                 isLastMoveCastle = Castle.QUEEN;
                 piecesInNewPosition.put(Square.D1, new Piece(Color.WHITE, Square.D1, PieceType.ROOK));
-                piecesInNewPosition.put(Square.A1, null);
+                piecesInNewPosition.remove(Square.A1);
             }
             if (endingSquare == Square.G1) {
                 isLastMoveCastle = Castle.KING;
                 piecesInNewPosition.put(Square.F1, new Piece(Color.WHITE, Square.F1, PieceType.ROOK));
-                piecesInNewPosition.put(Square.H1, null);
+                piecesInNewPosition.remove(Square.H1);
             }
             if (endingSquare == Square.C8) {
                 isLastMoveCastle = Castle.QUEEN;
                 piecesInNewPosition.put(Square.D8, new Piece(Color.BLACK, Square.D8, PieceType.ROOK));
-                piecesInNewPosition.put(Square.A8, null);
+                piecesInNewPosition.remove(Square.A8);
             }
             if (endingSquare == Square.G8) {
                 isLastMoveCastle = Castle.KING;
                 piecesInNewPosition.put(Square.F8, new Piece(Color.BLACK, Square.F8, PieceType.ROOK));
-                piecesInNewPosition.put(Square.H8, null);
+                piecesInNewPosition.remove(Square.H8);
             }
         }
         return new Position(
@@ -132,8 +148,8 @@ public class Position implements State {
     }
 
     private boolean isCastle(Square startingSquare, Square endingSquare) {
-        return (pieces.get(startingSquare).getPieceType() == PieceType.KING && startingSquare == Square.E1 && endingSquare == Square.G1 || endingSquare == Square.C1) ||
-                (pieces.get(startingSquare).getPieceType() == PieceType.KING && startingSquare == Square.E8 && endingSquare == Square.G8 || endingSquare == Square.C8);
+        return (getPieceTypeOnSquare(startingSquare) == PieceType.KING && startingSquare == Square.E1 && (endingSquare == Square.G1 || endingSquare == Square.C1)) ||
+                (getPieceTypeOnSquare(startingSquare) == PieceType.KING && startingSquare == Square.E8 && (endingSquare == Square.G8 || endingSquare == Square.C8));
     }
 
     public List<Square> getAttackingSquaresByPlayer(Color color) {
@@ -173,4 +189,93 @@ public class Position implements State {
                 isLastMoveCastle
         );
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Position position = (Position) o;
+        return whiteCanCastleQueenSide == position.whiteCanCastleQueenSide &&
+                whiteCanCastleKingSide == position.whiteCanCastleKingSide &&
+                blackCanCastleQueenSide == position.blackCanCastleQueenSide &&
+                blackCanCastleKingSide == position.blackCanCastleKingSide &&
+                numberOfPieces == position.numberOfPieces &&
+                pieces.equals(position.pieces) &&
+                playerToMove == position.playerToMove &&
+                Objects.equals(lastPlayedMove, position.lastPlayedMove) &&
+                isLastMoveCastle == position.isLastMoveCastle &&
+                whiteKingPosition == position.whiteKingPosition &&
+                blackKingPosition == position.blackKingPosition;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(pieces, whiteCanCastleQueenSide, whiteCanCastleKingSide, blackCanCastleQueenSide, blackCanCastleKingSide, playerToMove, lastPlayedMove, isLastMoveCastle, whiteKingPosition, blackKingPosition, numberOfPieces);
+    }
+
+    @Override
+    public boolean maxPlayer() {
+        return playerToMove == Color.WHITE;
+    }
+
+    public Piece getPieceAtSquare(Square square) {
+        return getPieces().get(square);
+    }
+
+    public Color getPieceColorOnSquare(Square square) {
+        return getPieceAtSquare(square).getColor();
+    }
+
+    public PieceType getPieceTypeOnSquare(Square square) {
+        Piece pieceAtSquare = getPieceAtSquare(square);
+        return pieceAtSquare == null ? null : pieceAtSquare.getPieceType();
+    }
+
+    public double getPieceValueOnSquare(Square square) {
+        PieceType pieceTypeOnSquare = getPieceTypeOnSquare(square);
+        return pieceTypeOnSquare == null ? 0 : pieceTypeOnSquare.getValue();
+    }
+
+    public Square getKingPosition(Color color) {
+        return color == Color.WHITE ? whiteKingPosition : blackKingPosition;
+    }
+
+    public boolean isSquareEmpty(Square square) {
+        return getPieces().get(square) == null;
+    }
+
+    public boolean isSquareAttackedBy(Color color, Square square) {
+        //todo improve performance, we need to cache which squares are attacked by which player in position!
+        return getAttackingSquaresByPlayer(color).contains(square);
+    }
+
+    public boolean isNotCheckForCastle(Castle castle, Color color) {
+        if (color == Color.WHITE) {
+            if (castle == Castle.KING) {
+                return
+                        isSquareAttackedBy(Color.BLACK, Square.E1) ||
+                        isSquareAttackedBy(Color.BLACK, Square.F1) ||
+                        isSquareAttackedBy(Color.BLACK, Square.G1);
+            } else {
+                return
+                        isSquareAttackedBy(Color.BLACK, Square.E1) ||
+                                isSquareAttackedBy(Color.BLACK, Square.D1) ||
+                                isSquareAttackedBy(Color.BLACK, Square.C1);
+            }
+        } else {
+            if (castle == Castle.KING) {
+                return
+                        isSquareAttackedBy(Color.WHITE, Square.E8) ||
+                                isSquareAttackedBy(Color.WHITE, Square.F8) ||
+                                isSquareAttackedBy(Color.WHITE, Square.G8);
+            } else {
+                return
+                        isSquareAttackedBy(Color.WHITE, Square.E8) ||
+                                isSquareAttackedBy(Color.WHITE, Square.D8) ||
+                                isSquareAttackedBy(Color.WHITE, Square.C8);
+            }
+        }
+    }
+
+
 }

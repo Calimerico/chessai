@@ -4,36 +4,45 @@ import com.chess.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class KingRuleMovement {
 
 
-    public static Set<Square> getMovingSquares(Position position, Square currentSquare) {
-        Set<Square> movingSquares = getAttackingSquares(position, currentSquare);
+    public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
+        Set<Move> legalMoves = getAttackingSquares(position, currentSquare)
+                .stream()
+                .map(square -> new Move(
+                        currentSquare,
+                        square
+                ))
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position,move))
+                .collect(Collectors.toSet());
         //castle
         if (currentSquare == Square.E1) {
             if (position.isWhiteCanCastleKingSide()) {
-                      movingSquares.add(Square.G1);
+                legalMoves.add(new Move(currentSquare, Square.G1, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.G1))));
             }
             if (position.isWhiteCanCastleQueenSide()) {
-                      movingSquares.add(Square.C1);
+                legalMoves.add(new Move(currentSquare, Square.C1, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.C1))));
+
             }
         }
         if (currentSquare == Square.E8) {
             if (position.isBlackCanCastleKingSide()) {
-                      movingSquares.add(Square.G8);
+                legalMoves.add(new Move(currentSquare, Square.G8, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.G8))));
             }
             if (position.isBlackCanCastleQueenSide()) {
-                      movingSquares.add(Square.C8);
+                legalMoves.add(new Move(currentSquare, Square.C8, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.C8))));
             }
         }
-        return movingSquares;
+        return legalMoves;
 
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {
 
-            Color myColor = position.getPieces().get(currentSquare).getColor();
+            Color myColor = position.getPieceColorOnSquare(currentSquare);
         Set<Square> attackingSquares = new HashSet<>();
 
         int rank = currentSquare.getRank();
@@ -51,7 +60,7 @@ public class KingRuleMovement {
 
     private static void addEndingSquareIfAppropriate(Position position, Color myColor, Set<Square> legalMoves, Square endingSquare) {
         if (endingSquare != null) {
-            Piece pieceOnEndingSquare = position.getPieces().get(endingSquare);
+            Piece pieceOnEndingSquare = position.getPieceAtSquare(endingSquare);
             if (pieceOnEndingSquare == null || pieceOnEndingSquare.getColor() != myColor) {
                 legalMoves.add(endingSquare);
             }

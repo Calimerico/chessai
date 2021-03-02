@@ -96,7 +96,7 @@ public enum Square {
     public static Square calculateSquareFromCoordinates(int file, int rank) {
         int i = 8 * file + rank;
 
-        if (i >= 64 || file > 7 || rank > 7) {
+        if (i >= 64 || file > 7 || rank > 7 || file < 0 || rank < 0) {
             return null;
         }
         return Square.values()[i];

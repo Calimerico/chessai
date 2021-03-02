@@ -4,16 +4,25 @@ import com.chess.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class RookRuleMovement {
 
 
-    public static Set<Square> getMovingSquares(Position position, Square currentSquare) {
-        return getAttackingSquares(position, currentSquare);
+    public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
+        return getAttackingSquares(position, currentSquare)
+                .stream()
+                .map(square -> new Move(
+                        currentSquare,
+                        square,
+                        position
+                ))
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position,move))
+                .collect(Collectors.toSet());
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {
-        Color myColor = position.getPieces().get(currentSquare).getColor();
+        Color myColor = position.getPieceColorOnSquare(currentSquare);
         Set<Square> legalMoves = new HashSet<>();
 
         int rank = currentSquare.getRank();
@@ -42,7 +51,7 @@ public class RookRuleMovement {
     private static boolean checkEndingSquare(Position position, Color myColor, Set<Square> legalMoves, int r, int f) {
         Square endingSquare = Square.calculateSquareFromCoordinates(f, r);
 
-        Piece pieceOnEndingSquare = position.getPieces().get(endingSquare);
+        Piece pieceOnEndingSquare = position.getPieceAtSquare(endingSquare);
         if (pieceOnEndingSquare != null) {
             if (pieceOnEndingSquare.getColor() != myColor) {
                 legalMoves.add(endingSquare);

@@ -7,21 +7,20 @@ import java.util.List;
 
 public class CheckRuleMovement {
 
-    public static boolean isKingInCheckAfterMove(Position position, Move move) {
+    public static boolean isKingInCheckAfterMove(Position position, Move move, Color color) {
         boolean isKingInCheckAfterMove = false;
         Position newPosition = position.newState(move);
-        Color playerToMove = position.getPlayerToMove();//beli
 
         for (Square square : Square.values()) {
-            Piece piece = newPosition.getPieces().get(square);
-            if (piece != null && piece.getPieceType() == PieceType.KING && piece.getColor() != playerToMove) {
-                isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(playerToMove).contains(piece.getSquare());
+            Piece piece = newPosition.getPieceAtSquare(square);
+            if (piece != null && piece.getPieceType() == PieceType.KING && piece.getColor() == color) {
+                isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color == Color.BLACK ? Color.WHITE : Color.BLACK).contains(piece.getSquare());
             }
         }
 
         //check castle check
         Castle castle = newPosition.getIsLastMoveCastle();
-        if (castle != null) {
+        if (castle == Castle.KING || castle == Castle.QUEEN) {
             if (newPosition.getPlayerToMove() == Color.BLACK) {
                 List<Square> blackAttacking = newPosition.getAttackingSquaresByPlayer(Color.BLACK);
                 if (castle == Castle.KING) {
@@ -41,5 +40,9 @@ public class CheckRuleMovement {
             }
         }
         return isKingInCheckAfterMove;
+    }
+
+    public static boolean isKingInCheckAfterMove(Position position, Move move) {
+        return isKingInCheckAfterMove(position, move, position.getPlayerToMove());
     }
 }

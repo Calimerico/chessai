@@ -6,12 +6,20 @@ import com.chess.Square;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class QueenRuleMovement {
 
-
-    public static Set<Square> getMovingSquares(Position position, Square currentSquare) {
-        return getAttackingSquares(position, currentSquare);
+    public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
+        return getAttackingSquares(position, currentSquare)
+                .stream()
+                .map(square -> new Move(
+                        currentSquare,
+                        square,
+                        position
+                ))
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position,move))
+                .collect(Collectors.toSet());
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {

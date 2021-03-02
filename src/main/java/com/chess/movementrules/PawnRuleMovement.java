@@ -4,28 +4,38 @@ import com.chess.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PawnRuleMovement {
 
 
-    public static Set<Square> getMovingSquares(Position position, Square currentSquare) {
-        Color myColor = position.getPieces().get(currentSquare).getColor();
+    public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
+
+        Set<Move> legalMoves = getAttackingSquares(position, currentSquare)
+                .stream()
+                .map(square -> new Move(
+                        currentSquare,
+                        square,
+                        position
+                ))
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position, move))
+                .collect(Collectors.toSet());
+
+        Color myColor = position.getPieceColorOnSquare(currentSquare);
 
         int rank = currentSquare.getRank();
         int file = currentSquare.getFile();
 
-        Set<Square> movingSquares = new HashSet<>(getAttackingSquares(position, currentSquare));
-
         //can I move forward
         if (myColor == Color.WHITE) {
             Square endingSquare = Square.calculateSquareFromCoordinates(file, rank + 1);
-            if (position.getPieces().get(endingSquare) != null) {
-                movingSquares.add(endingSquare);
+            if (position.isSquareEmpty(endingSquare)) {
+                legalMoves.add(new Move(currentSquare, endingSquare, position));
             }
         } else {
             Square endingSquare = Square.calculateSquareFromCoordinates(file, rank - 1);
-            if (position.getPieces().get(endingSquare) != null) {
-                movingSquares.add(endingSquare);
+            if (position.isSquareEmpty(endingSquare)) {
+                legalMoves.add(new Move(currentSquare, endingSquare, position));
             }
         }
 
@@ -35,30 +45,30 @@ public class PawnRuleMovement {
         if (lastPlayedMove != null) {
             Square lastPlayedMoveEndingSquare = lastPlayedMove.getEndingSquare();
             Square lastPlayedMoveStartingSquare = lastPlayedMove.getStartingSquare();
-            if (lastPlayedMoveEndingSquare.getRank() == currentSquare.getRank() && position.getPieces().get(lastPlayedMoveEndingSquare).getPieceType() == PieceType.PAWN) {
+            if (lastPlayedMoveEndingSquare.getRank() == currentSquare.getRank() && position.getPieceTypeOnSquare(lastPlayedMoveEndingSquare) == PieceType.PAWN) {
                 if (myColor == Color.WHITE) {
                     Square enPassantSquareRight = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() + 1, lastPlayedMoveEndingSquare.getRank() + 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareRight) {
-                        movingSquares.add(enPassantSquareRight);
+                        legalMoves.add(new Move(currentSquare, enPassantSquareRight, position));
                     }
                     Square enPassantSquareLeft = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() - 1, lastPlayedMoveEndingSquare.getRank() + 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareLeft) {
-                        movingSquares.add(enPassantSquareLeft);
+                        legalMoves.add(new Move(currentSquare, enPassantSquareLeft, position));
                     }
                 } else {
                     Square enPassantSquareRight = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() + 1, lastPlayedMoveEndingSquare.getRank() - 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareRight) {
-                        movingSquares.add(enPassantSquareRight);
+                        legalMoves.add(new Move(currentSquare, enPassantSquareRight, position));
                     }
                     Square enPassantSquareLeft = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() - 1, lastPlayedMoveEndingSquare.getRank() - 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareLeft) {
-                        movingSquares.add(enPassantSquareLeft);
+                        legalMoves.add(new Move(currentSquare, enPassantSquareLeft, position));
                     }
                 }
             }
         }
 
-        return movingSquares;
+        return legalMoves;
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {
