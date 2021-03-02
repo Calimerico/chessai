@@ -41,4 +41,23 @@ public class PositionLegalMovesTest {
         Assertions.assertThat(actions.size()).isEqualTo(17);
 
     }
+
+    @Test
+    void name() {
+        //given
+        Position position = PositionGenerator.fromFEN("8/2k2NP1/8/8/8/8/2K1r3/8 w - - 1 1");
+        //when
+        Set<Action> actions = position.getActions();
+        //then
+        Assertions.assertThat(actions).contains(
+                new Move(Square.C2, Square.B1, 0, false),
+                new Move(Square.C2, Square.C1, 0, false),
+                new Move(Square.C2, Square.D1, 0, false),
+                new Move(Square.C2, Square.B3, 0, false),
+                new Move(Square.C2, Square.C3, 0, false),
+                new Move(Square.C2, Square.D3, 0, false)
+        );
+
+        Assertions.assertThat(actions.size()).isEqualTo(6);
+    }
 }

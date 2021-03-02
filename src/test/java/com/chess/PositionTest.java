@@ -20,6 +20,5 @@ public class PositionTest {
         //then
         Assertions.assertThat(((Move) action).getStartingSquare()).isEqualTo(Square.C4);
         Assertions.assertThat(((Move) action).getEndingSquare()).isEqualTo(Square.D6);
-        System.out.println("pera");
     }
 }

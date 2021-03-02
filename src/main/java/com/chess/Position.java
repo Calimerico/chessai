@@ -36,7 +36,10 @@ public class Position implements MiniMaxState {
         this.whiteKingPosition = Arrays.stream(Square.values()).filter(square -> {
             Piece piece = pieces.get(square);
             return piece != null && piece.getColor() == Color.WHITE && piece.getPieceType() == PieceType.KING;
-        }).findFirst().orElseThrow(() -> new RuntimeException("There must be white king on he board! Pieces present: " + pieces));
+        }).findFirst().orElseThrow(() -> {
+            RuntimeException runtimeException = new RuntimeException("There must be white king on he board! Pieces present: " + pieces);
+            return runtimeException;
+        });
         this.blackKingPosition = Arrays.stream(Square.values()).filter(square -> {
             Piece piece = pieces.get(square);
             return piece != null && piece.getColor() == Color.BLACK && piece.getPieceType() == PieceType.KING;
@@ -70,12 +73,12 @@ public class Position implements MiniMaxState {
         Piece pieceOnOldSquare = this.pieces.get(startingSquare);
         piecesInNewPosition.put(move.getEndingSquare(), new Piece(pieceOnOldSquare.getColor(), move.getEndingSquare(), pieceOnOldSquare.getPieceType()));
         piecesInNewPosition.remove(startingSquare);
-        if (startingSquare == Square.E1) {
+        if (getPieceTypeOnSquare(startingSquare) == PieceType.KING && getPieceColorOnSquare(startingSquare) == Color.WHITE) {
             //white king moving, loosing right to castle
             newWhiteCanCastleKingSide = false;
             newWhiteCanCastleQueenSide = false;
         }
-        if (startingSquare == Square.E8) {
+        if (getPieceTypeOnSquare(startingSquare) == PieceType.KING && getPieceColorOnSquare(startingSquare) == Color.BLACK) {
             //black king moving, loosing right to castle
             newBlackCanCastleKingSide = false;
             newBlackCanCastleQueenSide = false;

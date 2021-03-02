@@ -3,6 +3,7 @@ package com.chess;
 import com.ai.Action;
 import com.ai.DummyAction;
 import com.chess.movementrules.CheckRuleMovement;
+import lombok.NonNull;
 import lombok.Value;
 
 import java.util.Objects;
@@ -12,13 +13,13 @@ public class Move implements Action {
     Square endingSquare;
     int order;
 
-    public Move(Square startingSquare, Square endingSquare) {
+    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare) {
         this.startingSquare = startingSquare;
         this.endingSquare = endingSquare;
         order = order + startingSquare.ordinal() + endingSquare.ordinal();
     }
 
-    public Move(Square startingSquare, Square endingSquare, int canCaptureMaterial, boolean isCheck) {
+    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, int canCaptureMaterial, boolean isCheck) {
         this.startingSquare = startingSquare;
         this.endingSquare = endingSquare;
         order = canCaptureMaterial * 10000;
@@ -28,7 +29,7 @@ public class Move implements Action {
         order = order + startingSquare.ordinal() + endingSquare.ordinal();
     }
 
-    public Move(Square startingSquare, Square endingSquare, Position position) {
+    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position) {
         this.startingSquare = startingSquare;
         this.endingSquare = endingSquare;
         this.order = ((int) position.getPieceValueOnSquare(endingSquare)) * 10000;

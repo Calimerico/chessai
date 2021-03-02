@@ -29,13 +29,19 @@ public class PawnRuleMovement {
         //can I move forward
         if (myColor == Color.WHITE) {
             Square endingSquare = Square.calculateSquareFromCoordinates(file, rank + 1);
-            if (position.isSquareEmpty(endingSquare)) {
-                legalMoves.add(new Move(currentSquare, endingSquare, position));
+            if (endingSquare != null && position.isSquareEmpty(endingSquare)) {
+                Move move = new Move(currentSquare, endingSquare, position);
+                if (!CheckRuleMovement.isKingInCheckAfterMove(position, move)) {
+                    legalMoves.add(move);
+                }
             }
         } else {
             Square endingSquare = Square.calculateSquareFromCoordinates(file, rank - 1);
-            if (position.isSquareEmpty(endingSquare)) {
-                legalMoves.add(new Move(currentSquare, endingSquare, position));
+            if (endingSquare != null && position.isSquareEmpty(endingSquare)) {
+                Move move = new Move(currentSquare, endingSquare, position);
+                if (!CheckRuleMovement.isKingInCheckAfterMove(position, move)) {
+                    legalMoves.add(move);
+                }
             }
         }
 
@@ -49,20 +55,32 @@ public class PawnRuleMovement {
                 if (myColor == Color.WHITE) {
                     Square enPassantSquareRight = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() + 1, lastPlayedMoveEndingSquare.getRank() + 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareRight) {
-                        legalMoves.add(new Move(currentSquare, enPassantSquareRight, position));
+                        Move move = new Move(currentSquare, enPassantSquareRight, position);
+                        if (!CheckRuleMovement.isKingInCheckAfterMove(position, move)) {
+                            legalMoves.add(move);
+                        }
                     }
                     Square enPassantSquareLeft = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() - 1, lastPlayedMoveEndingSquare.getRank() + 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareLeft) {
-                        legalMoves.add(new Move(currentSquare, enPassantSquareLeft, position));
+                        Move move = new Move(currentSquare, enPassantSquareLeft, position);
+                        if (!CheckRuleMovement.isKingInCheckAfterMove(position, move)) {
+                            legalMoves.add(move);
+                        }
                     }
                 } else {
                     Square enPassantSquareRight = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() + 1, lastPlayedMoveEndingSquare.getRank() - 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareRight) {
-                        legalMoves.add(new Move(currentSquare, enPassantSquareRight, position));
+                        Move move = new Move(currentSquare, enPassantSquareRight, position);
+                        if (!CheckRuleMovement.isKingInCheckAfterMove(position, move)) {
+                            legalMoves.add(move);
+                        }
                     }
                     Square enPassantSquareLeft = Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile() - 1, lastPlayedMoveEndingSquare.getRank() - 2);
                     if (lastPlayedMoveStartingSquare == enPassantSquareLeft) {
-                        legalMoves.add(new Move(currentSquare, enPassantSquareLeft, position));
+                        Move move = new Move(currentSquare, enPassantSquareLeft, position);
+                        if (!CheckRuleMovement.isKingInCheckAfterMove(position, move)) {
+                            legalMoves.add(move);
+                        }
                     }
                 }
             }
