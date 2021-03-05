@@ -1,17 +1,17 @@
 package com.chess;
 
 import com.ai.Action;
-import com.ai.DummyAction;
 import com.ai.MiniMaxState;
 import com.ai.State;
-import com.github.bhlangonijr.chesslib.Board;
-import lombok.Getter;
 import lombok.Value;
 
 import java.util.*;
 
 @Value
 public class Position implements MiniMaxState {
+    public static LinkedList<Long> getActions = new LinkedList<>();
+    public static LinkedList<Long> konstruktor = new LinkedList<>();
+    public static LinkedList<Long> newState = new LinkedList<>();
     Map<Square, Piece> pieces;
     boolean whiteCanCastleQueenSide;
     boolean whiteCanCastleKingSide;
@@ -25,6 +25,7 @@ public class Position implements MiniMaxState {
     int numberOfPieces;
 
     public Position(Map<Square, Piece> pieces, boolean whiteCanCastleQueenSide, boolean whiteCanCastleKingSide, boolean blackCanCastleQueenSide, boolean blackCanCastleKingSide, Color playerToMove, Move lastPlayedMove, Castle isLastMoveCastle) {
+        long start = System.nanoTime();
         this.pieces = Collections.unmodifiableMap(pieces);
         this.whiteCanCastleQueenSide = whiteCanCastleQueenSide;
         this.whiteCanCastleKingSide = whiteCanCastleKingSide;
@@ -45,10 +46,12 @@ public class Position implements MiniMaxState {
             return piece != null && piece.getColor() == Color.BLACK && piece.getPieceType() == PieceType.KING;
         }).findFirst().orElseThrow(() -> new RuntimeException("There must be black king on he board! Pieces present: " + pieces));
         this.numberOfPieces = this.pieces.size();
+        konstruktor.add(System.nanoTime() - start);
     }
 
     @Override
     public Set<Action> getActions() {
+        long start = System.nanoTime();
         Set<Action> moves = new TreeSet<>();
         for (Square square : Square.values()) {
             Piece piece = pieces.get(square);
@@ -57,11 +60,13 @@ public class Position implements MiniMaxState {
                 moves.addAll(legalMoves);
             }
         }
+        getActions.add(System.nanoTime() - start);
         return moves;
     }
 
     @Override
     public Position newState(Action action) {
+        long start = System.nanoTime();
         Move move = (Move) action;
         Square startingSquare = move.getStartingSquare();
         Square endingSquare = move.getEndingSquare();
@@ -138,6 +143,8 @@ public class Position implements MiniMaxState {
                 piecesInNewPosition.remove(Square.H8);
             }
         }
+        newState.add(System.nanoTime() - start);
+
         return new Position(
                 piecesInNewPosition,
                 newWhiteCanCastleQueenSide,

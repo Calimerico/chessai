@@ -73,4 +73,12 @@ public class Move implements Action {
     public int hashCode() {
         return Objects.hash(startingSquare, endingSquare, order);
     }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "startingSquare=" + startingSquare +
+                ", endingSquare=" + endingSquare +
+                '}';
+    }
 }
