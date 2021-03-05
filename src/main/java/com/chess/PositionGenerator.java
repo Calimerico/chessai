@@ -11,6 +11,7 @@ public class PositionGenerator {
 
     public static Position fromFEN(String FEN) {
         Board board = new Board();
+        board.loadFromFen(FEN);
         Color playerToMove = Color.fromSide(board.getSideToMove());
         Map<Square, Piece> pieces = new HashMap<>();
         CastleRight whiteCastleRight = board.getCastleRight().get(Side.WHITE);
@@ -19,7 +20,6 @@ public class PositionGenerator {
         boolean whiteCanCastleKingSide = whiteCastleRight == CastleRight.KING_AND_QUEEN_SIDE || whiteCastleRight == CastleRight.KING_SIDE;
         boolean blackCanCastleQueenSide = blackCastleRight == CastleRight.KING_AND_QUEEN_SIDE || blackCastleRight == CastleRight.QUEEN_SIDE;;
         boolean blackCanCastleKingSide = blackCastleRight == CastleRight.KING_AND_QUEEN_SIDE || blackCastleRight == CastleRight.KING_SIDE;;
-        board.loadFromFen(FEN);
         for (com.github.bhlangonijr.chesslib.Square square : com.github.bhlangonijr.chesslib.Square.values()) {
             Square mySquare = Square.fromLibSquare(square);
             com.github.bhlangonijr.chesslib.Piece piece = board.getPiece(square);
