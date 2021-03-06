@@ -27,21 +27,6 @@ public class PuzzleTest {
         //then
         Assertions.assertThat(((Move) action2).getStartingSquare()).isEqualTo(Square.C3);
         Assertions.assertThat(((Move) action2).getEndingSquare()).isEqualTo(Square.B5);
-        System.out.println("Konstruktor size: " + Position.konstruktor.size());
-        System.out.println("Konstruktor avg: " + Position.konstruktor.stream()
-                .reduce(0l, Long::sum) / Position.konstruktor.size());
-        System.out.println("getActions size: " + Position.konstruktor.size());
-        System.out.println("getActions avg: " + Position.getActions.stream()
-                .reduce(0l, Long::sum) / Position.getActions.size());
-        System.out.println("newState size: " + Position.newState.size());
-        System.out.println("newState avg: " + Position.newState.stream()
-                .reduce(0l, Long::sum) / Position.newState.size());
-        System.out.println("knight getLegalMoves size: " + KnightRuleMovement.getLegalMoves.size());
-        System.out.println("knight  getLegalMoves avg: " + KnightRuleMovement.getLegalMoves.stream()
-                .reduce(0l, Long::sum) / KnightRuleMovement.getLegalMoves.size());
-        System.out.println("knight getAttackingSquares size: " + KnightRuleMovement.getAttackingSquares.size());
-        System.out.println("knight  getAttackingSquares avg: " + KnightRuleMovement.getAttackingSquares.stream()
-                .reduce(0l, Long::sum) / KnightRuleMovement.getAttackingSquares.size());
     }
 
     @Test
@@ -52,7 +37,6 @@ public class PuzzleTest {
         MiniMax miniMax = new MiniMax(new BreakTest());
         Action action = miniMax.search(position);
         //then
-        System.out.println("pera");
     }
 
     @Test
