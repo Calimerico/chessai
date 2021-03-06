@@ -22,7 +22,8 @@ public class PuzzleTest {
 
         //when
         Position newPosition = position.newState(action).newState(new Move(Square.B8, Square.A7));
-        Action action2 = miniMax.search(newPosition);
+        MiniMax miniMax2 = new MiniMax(new BreakTest());
+        Action action2 = miniMax2.search(newPosition);
         //then
         Assertions.assertThat(((Move) action2).getStartingSquare()).isEqualTo(Square.C3);
         Assertions.assertThat(((Move) action2).getEndingSquare()).isEqualTo(Square.B5);
