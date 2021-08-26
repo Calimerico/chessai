@@ -1,9 +1,9 @@
 package com.chess;
 
-import lombok.Value;
-
+import lombok.ToString;
 import java.util.Set;
 
+@ToString
 public class Piece {
     Color color;
     Square square;

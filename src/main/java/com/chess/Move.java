@@ -1,14 +1,12 @@
 package com.chess;
 
 import com.ai.Action;
-import com.ai.DummyAction;
 import com.chess.movementrules.CheckRuleMovement;
 import lombok.NonNull;
-import lombok.Value;
 
 import java.util.Objects;
 
-public class Move implements Action {
+public class Move implements Action, Comparable<Move> {
     Square startingSquare;
     Square endingSquare;
     int order;
@@ -40,11 +38,9 @@ public class Move implements Action {
         order = order + startingSquare.ordinal() + endingSquare.ordinal();
     }
 
-
-
     @Override
-    public int compareTo(Action move) {
-        return Integer.compare(((Move) move).getOrder(), order);
+    public int compareTo(Move move) {
+        return Integer.compare(move.getOrder(), order);
     }
 
     public int getOrder() {

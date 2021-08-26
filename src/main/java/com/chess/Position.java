@@ -3,11 +3,12 @@ package com.chess;
 import com.ai.Action;
 import com.ai.MiniMaxState;
 import com.ai.State;
-import lombok.Value;
+import lombok.Getter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-@Value
+@Getter //todo wtf ddd getter
 public class Position implements MiniMaxState {
     Map<Square, Piece> pieces;
     boolean whiteCanCastleQueenSide;
@@ -50,7 +51,7 @@ public class Position implements MiniMaxState {
         for (Square square : Square.values()) {
             Piece piece = pieces.get(square);
             if (piece != null && piece.getColor() == playerToMove) {
-                Set<Move> legalMoves = piece.getLegalMoves(this);
+                Set<Action> legalMoves = piece.getLegalMoves(this).stream().map(move -> ((Action) move)).collect(Collectors.toSet());
                 moves.addAll(legalMoves);
             }
         }

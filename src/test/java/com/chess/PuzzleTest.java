@@ -14,7 +14,7 @@ public class PuzzleTest {
         //given
         Position position = PositionGenerator.fromFEN("1k6/1pp5/3r4/8/8/2N2R2/5PP1/6K1 w - - 0 1");
         //when
-        MiniMax miniMax = new MiniMax(new BreakTest());
+        MiniMax miniMax = new MiniMax(new BreakTest(6));
         Action action = miniMax.search(position);
         //then
         Assertions.assertThat(((Move) action).getStartingSquare()).isEqualTo(Square.F3);
@@ -22,7 +22,7 @@ public class PuzzleTest {
 
         //when
         Position newPosition = position.newState(action).newState(new Move(Square.B8, Square.A7));
-        MiniMax miniMax2 = new MiniMax(new BreakTest());
+        MiniMax miniMax2 = new MiniMax(new BreakTest(6));
         Action action2 = miniMax2.search(newPosition);
         //then
         Assertions.assertThat(((Move) action2).getStartingSquare()).isEqualTo(Square.C3);
@@ -34,7 +34,7 @@ public class PuzzleTest {
         //given
         Position position = PositionGenerator.fromFEN("3R4/kpp5/8/8/8/2N5/5PP1/6K1 w - - 1 1");
         //when
-        MiniMax miniMax = new MiniMax(new BreakTest());
+        MiniMax miniMax = new MiniMax(new BreakTest(6));
         Action action = miniMax.search(position);
         //then
     }
@@ -43,7 +43,7 @@ public class PuzzleTest {
     void name3() {
         Position position = PositionGenerator.fromFEN("6k1/5ppp/8/8/4n3/8/PP6/1K3R2 b - - 0 1");
         //when
-        MiniMax miniMax = new MiniMax(new BreakTest());
+        MiniMax miniMax = new MiniMax(new BreakTest(6));
         Action action = miniMax.search(position);
         //then
         Assertions.assertThat(((Move) action).getStartingSquare()).isEqualTo(Square.E4);

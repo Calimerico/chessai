@@ -19,4 +19,13 @@ public class PawnRuleMovementTest {
                 new Move(Square.G7, Square.G8, 0, false)
         );
     }
+
+    @Test
+    void promotionWorks() {
+        //given
+        Position position = PositionGenerator.fromFEN("8/1k4P1/8/8/8/3K4/8/8 w - - 0 1");
+        //when
+        Position newPosition = position.newState(new Move(Square.G7, Square.G8));
+        Assertions.assertThat(newPosition.getHeuristicFunction()).isEqualTo(9);
+    }
 }
