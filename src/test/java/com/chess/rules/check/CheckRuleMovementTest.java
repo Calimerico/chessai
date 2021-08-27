@@ -1,5 +1,9 @@
-package com.chess;
+package com.chess.rules.check;
 
+import com.chess.Move;
+import com.chess.Position;
+import com.chess.PositionGenerator;
+import com.chess.Square;
 import com.chess.movementrules.CheckRuleMovement;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
