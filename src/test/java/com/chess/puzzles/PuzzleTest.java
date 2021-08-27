@@ -3,6 +3,7 @@ package com.chess.puzzles;
 import com.ai.Action;
 import com.ai.BreakTest;
 import com.ai.MiniMax;
+import com.ai.ZobristHashing;
 import com.chess.*;
 import com.chess.movementrules.KnightRuleMovement;
 import org.assertj.core.api.Assertions;
@@ -21,11 +22,12 @@ public class PuzzleTest {
         //given
         Position position = PositionGenerator.fromFEN(positionFen);
         //when
-        MiniMax miniMax = new MiniMax(new ChessBreakTest(6));
+        MiniMax miniMax = new MiniMax(new ChessBreakTest(6), new ZobristHashing());
         Action action = miniMax.search(position);
         //then
         Assertions.assertThat(((Move) action).getStartingSquare()).isEqualTo(startingSquare);
         Assertions.assertThat(((Move) action).getEndingSquare()).isEqualTo(endingSquare);
+        System.out.println("Broj kombinacija je " + Counter.counter);
     }
 
     private static Stream<Arguments> positions() {

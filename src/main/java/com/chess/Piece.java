@@ -1,10 +1,13 @@
 package com.chess;
 
+import com.ai.ZobristValue;
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import java.util.Set;
 
 @ToString
-public class Piece {
+@EqualsAndHashCode
+public class Piece implements ZobristValue {
     Color color;
     Square square;
     PieceType pieceType;

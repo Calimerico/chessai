@@ -3,6 +3,7 @@ package com.chess;
 import com.ai.Action;
 import com.ai.MiniMaxState;
 import com.ai.State;
+import com.ai.ZobristValue;
 import lombok.Getter;
 
 import java.util.*;
@@ -60,6 +61,7 @@ public class Position implements MiniMaxState {
 
     @Override
     public Position newState(Action action) {
+        Counter.counter++;
         Move move = (Move) action;
         Square startingSquare = move.getStartingSquare();
         Square endingSquare = move.getEndingSquare();
@@ -233,6 +235,24 @@ public class Position implements MiniMaxState {
     @Override
     public boolean maxPlayer() {
         return playerToMove == Color.WHITE;
+    }
+
+    @Override
+    public List<ZobristValue> getAllZobristValues() {
+        List<ZobristValue> zobristValues = new ArrayList<>(768);
+        for (Square square : Square.values()) {
+            for (PieceType pieceType : PieceType.values()) {
+                for (Color color : Color.values()) {
+                    zobristValues.add(new Piece(color, square, pieceType));
+                }
+            }
+        }
+        return Collections.unmodifiableList(zobristValues);
+    }
+
+    @Override
+    public List<ZobristValue> getCurrentZobristValues() {
+        return pieces.values().stream().map(squarePieceEntry -> ((ZobristValue) squarePieceEntry)).collect(Collectors.toList());
     }
 
     public Piece getPieceAtSquare(Square square) {
