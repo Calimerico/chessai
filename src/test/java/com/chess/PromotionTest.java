@@ -13,7 +13,7 @@ public class PromotionTest {
         //given
         Position position = PositionGenerator.fromFEN("8/4k1P1/8/8/3p4/3K4/8/8 w - - 0 1");
         //when
-        MiniMax miniMax = new MiniMax(new BreakTest(6));
+        MiniMax miniMax = new MiniMax(new ChessBreakTest(6));
         Action action = miniMax.search(position);
         //then
         Assertions.assertThat(((Move) action).getStartingSquare()).isEqualTo(Square.G7);

@@ -143,10 +143,15 @@ public class Position implements MiniMaxState {
                 newWhiteCanCastleKingSide,
                 newBlackCanCastleQueenSide,
                 newBlackCanCastleKingSide,
-                this.playerToMove == Color.WHITE ? Color.BLACK : Color.WHITE,
+                this.playerToMove.opposite(),
                 move,
                 isLastMoveCastle
         );
+    }
+
+
+    private boolean isKingInCheck() {
+        return getAttackingSquaresByPlayer(playerToMove.opposite()).contains(getKingPosition(playerToMove));
     }
 
     private boolean isCastle(Square startingSquare, Square endingSquare) {
@@ -164,6 +169,16 @@ public class Position implements MiniMaxState {
 
     @Override
     public double getHeuristicFunction() {
+        if (insufficientMaterial()) {
+            return 0;
+        }
+        if (getActions().isEmpty()) {
+            if (isKingInCheck()) {
+                return -900000;
+            } else {
+                return 0;
+            }
+        }//todo extract somewhere
         double sum = 0.0;
         for (Square square : Square.values()) {
             Piece piece = pieces.get(square);
@@ -279,5 +294,50 @@ public class Position implements MiniMaxState {
         }
     }
 
+    private boolean containsKnight() {
+        return getPieces()
+                .values()
+                .stream()
+                .anyMatch(piece -> piece.getPieceType() == PieceType.KNIGHT);
+    }
 
+    private boolean containsBishop() {
+        return getPieces()
+                .values()
+                .stream()
+                .anyMatch(piece -> piece.getPieceType() == PieceType.BISHOP);
+    }
+
+    private boolean containsKnight(Color color) {
+        return getPieces()
+                .values()
+                .stream()
+                .anyMatch(piece -> piece.getPieceType() == PieceType.KNIGHT && piece.getColor() == color);
+    }
+
+    private boolean containsBishop(Color color) {
+        return getPieces()
+                .values()
+                .stream()
+                .anyMatch(piece -> piece.getPieceType() == PieceType.BISHOP && piece.getColor() == color);
+    }
+
+    private long getNumberOfPieces(Color color) {
+        return getPieces().values().stream().filter(piece -> piece.getColor() == color).count();
+    }
+
+
+    public boolean insufficientMaterial() {
+        return
+                        getNumberOfPieces() == 2 ||
+                        (getNumberOfPieces() == 3 && containsBishop()) ||
+                        (getNumberOfPieces() == 3 && containsKnight()) ||
+                        (
+                                getNumberOfPieces(Color.WHITE) == 2 &&
+                                getNumberOfPieces(Color.BLACK) == 2 &&
+                                (containsKnight(Color.WHITE) || containsBishop(Color.WHITE)) && (containsKnight(Color.BLACK) || containsBishop(Color.BLACK))
+                        )
+
+                ;
+    }
 }

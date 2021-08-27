@@ -32,7 +32,7 @@ public class Move implements Action, Comparable<Move> {
         this.endingSquare = endingSquare;
         this.order = ((int) position.getPieceValueOnSquare(endingSquare)) * 10000;
         Move move = new Move(startingSquare, endingSquare);
-        if (CheckRuleMovement.isKingInCheckAfterMove(position, move, position.getPlayerToMove() == Color.WHITE ? Color.BLACK : Color.WHITE)) {
+        if (CheckRuleMovement.isKingInCheckAfterMove(position, move, position.getPlayerToMove().opposite())) {
             order+=20000;
         }
         order = order + startingSquare.ordinal() + endingSquare.ordinal();
