@@ -61,7 +61,7 @@ public class Position implements MiniMaxState {
 
     @Override
     public Position newState(Action action) {
-        Counter.counter++;
+        PerformanceMonitor.newPosition();
         Move move = (Move) action;
         Square startingSquare = move.getStartingSquare();
         Square endingSquare = move.getEndingSquare();
@@ -138,7 +138,6 @@ public class Position implements MiniMaxState {
                 piecesInNewPosition.remove(Square.H8);
             }
         }
-
         return new Position(
                 piecesInNewPosition,
                 newWhiteCanCastleQueenSide,

@@ -8,6 +8,7 @@ import java.util.List;
 public class CheckRuleMovement {
 
     public static boolean isKingInCheckAfterMove(Position position, Move move, Color color) {
+        PerformanceMonitor.isKingInCheckStart();
         boolean isKingInCheckAfterMove = false;
         Position newPosition = position.newState(move);
 
@@ -39,6 +40,7 @@ public class CheckRuleMovement {
                 }
             }
         }
+        PerformanceMonitor.isKingInCheckEnd();
         return isKingInCheckAfterMove;
     }
 

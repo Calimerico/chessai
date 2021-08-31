@@ -1,5 +1,6 @@
 package com.chess;
 
+import com.ai.Action;
 import com.chess.movementrules.*;
 
 import java.util.Collections;
@@ -33,21 +34,34 @@ public class PositionLegalMovesService {
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square square) {
+        PerformanceMonitor.getAttackingSquaresStart();
         Piece piece = position.getPieceAtSquare(square);
         if (piece != null) {
             switch (piece.getPieceType()) {
                 case BISHOP:
-                    return BishopRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares = BishopRuleMovement.getAttackingSquares(position, square);
+                    PerformanceMonitor.getAttackingSquaresEnd();
+                    return attackingSquares;
                 case ROOK:
-                    return RookRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares1 = RookRuleMovement.getAttackingSquares(position, square);
+                    PerformanceMonitor.getAttackingSquaresEnd();
+                    return attackingSquares1;
                 case QUEEN:
-                    return QueenRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares2 = QueenRuleMovement.getAttackingSquares(position, square);
+                    PerformanceMonitor.getAttackingSquaresEnd();
+                    return attackingSquares2;
                 case KNIGHT:
-                    return KnightRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares3 = KnightRuleMovement.getAttackingSquares(position, square);
+                    PerformanceMonitor.getAttackingSquaresEnd();
+                    return attackingSquares3;
                 case PAWN:
-                    return PawnRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares4 = PawnRuleMovement.getAttackingSquares(position, square);
+                    PerformanceMonitor.getAttackingSquaresEnd();
+                    return attackingSquares4;
                 case KING:
-                    return KingRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares5 = KingRuleMovement.getAttackingSquares(position, square);
+                    PerformanceMonitor.getAttackingSquaresEnd();
+                    return attackingSquares5;
                 default:
                     throw new RuntimeException("Piece not recognized!");
             }
