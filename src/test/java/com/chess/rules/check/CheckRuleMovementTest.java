@@ -15,7 +15,7 @@ public class CheckRuleMovementTest {
         //given
         Position position = PositionGenerator.fromFEN("4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1");
         //when
-        boolean kingInCheckAfterMove = CheckRuleMovement.isKingInCheckAfterMove(position, new Move(Square.C2, Square.B3,0, false), position.getPlayerToMove());
+        boolean kingInCheckAfterMove = CheckRuleMovement.isKingInCheckAfterMove(position, new Move(Square.C2, Square.B3, position), position.getPlayerToMove());
         //then
         AssertionsForClassTypes.assertThat(kingInCheckAfterMove).isFalse();
     }
@@ -25,7 +25,7 @@ public class CheckRuleMovementTest {
         //given
         Position position = PositionGenerator.fromFEN("4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1");
         //when
-        boolean kingInCheckAfterMove = CheckRuleMovement.isKingInCheckAfterMove(position, new Move(Square.C2, Square.C1, 0, false), position.getPlayerToMove());
+        boolean kingInCheckAfterMove = CheckRuleMovement.isKingInCheckAfterMove(position, new Move(Square.C2, Square.C1, position), position.getPlayerToMove());
         //then
         AssertionsForClassTypes.assertThat(kingInCheckAfterMove).isFalse();
     }
@@ -35,7 +35,7 @@ public class CheckRuleMovementTest {
         //given
         Position position = PositionGenerator.fromFEN("4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1");
         //when
-        boolean kingInCheckAfterMove = CheckRuleMovement.isKingInCheckAfterMove(position, new Move(Square.C4, Square.D6, 0, true), position.getPlayerToMove());
+        boolean kingInCheckAfterMove = CheckRuleMovement.isKingInCheckAfterMove(position, new Move(Square.C4, Square.D6, position), position.getPlayerToMove());
         //then
         AssertionsForClassTypes.assertThat(kingInCheckAfterMove).isFalse();
     }

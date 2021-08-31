@@ -17,7 +17,7 @@ public class KnightRuleMovement {
                         square,
                         position
                 ))
-                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position, move))
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
                 .collect(Collectors.toSet());
         return moves;
     }

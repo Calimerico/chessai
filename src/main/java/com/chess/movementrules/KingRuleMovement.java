@@ -17,24 +17,24 @@ public class KingRuleMovement {
                         square,
                         position
                 ))
-                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(position,move))
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
                 .collect(Collectors.toSet());
         //castle
         if (currentSquare == Square.E1) {
             if (position.isWhiteCanCastleKingSide()) {
-                legalMoves.add(new Move(currentSquare, Square.G1, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.G1))));
+                legalMoves.add(new Move(currentSquare, Square.G1, position));
             }
             if (position.isWhiteCanCastleQueenSide()) {
-                legalMoves.add(new Move(currentSquare, Square.C1, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.C1))));
+                legalMoves.add(new Move(currentSquare, Square.C1, position));
 
             }
         }
         if (currentSquare == Square.E8) {
             if (position.isBlackCanCastleKingSide()) {
-                legalMoves.add(new Move(currentSquare, Square.G8, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.G8))));
+                legalMoves.add(new Move(currentSquare, Square.G8, position));
             }
             if (position.isBlackCanCastleQueenSide()) {
-                legalMoves.add(new Move(currentSquare, Square.C8, 0,CheckRuleMovement.isKingInCheckAfterMove(position,new Move(currentSquare, Square.C8))));
+                legalMoves.add(new Move(currentSquare, Square.C8, position));
             }
         }
         return legalMoves;

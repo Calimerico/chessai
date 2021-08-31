@@ -44,74 +44,78 @@ public class LegalMovesTest {
     }
 
     private static Stream<Arguments> legalMovesFromSquare() {
+        String fen = "4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1";
+        Position position = PositionGenerator.fromFEN(fen);
         return Stream.of(
                 Arguments.of(
-                        "4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1",
+                        fen,
                         Square.C2,
                         Arrays.asList(
-                                new Move(Square.C2, Square.B1, 0, false),
-                                new Move(Square.C2, Square.C1, 0, false),
-                                new Move(Square.C2, Square.D1, 0, false),
-                                new Move(Square.C2, Square.B2, 0, false),
-                                new Move(Square.C2, Square.D2, 0, false),
-                                new Move(Square.C2, Square.B3, 0, false),
-                                new Move(Square.C2, Square.C3, 0, false),
-                                new Move(Square.C2, Square.D3, 0, false)
+                                new Move(Square.C2, Square.B1,position),
+                                new Move(Square.C2, Square.C1,position),
+                                new Move(Square.C2, Square.D1,position),
+                                new Move(Square.C2, Square.B2,position),
+                                new Move(Square.C2, Square.D2,position),
+                                new Move(Square.C2, Square.B3,position),
+                                new Move(Square.C2, Square.C3,position),
+                                new Move(Square.C2, Square.D3,position)
                         )),
                 Arguments.of(
-                        "4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1",
+                        fen,
                         Square.C4,
                         Arrays.asList(
-                                new Move(Square.C4, Square.A3, 0, false),
-                                new Move(Square.C4, Square.A5, 0, true),
-                                new Move(Square.C4, Square.B6, 0, false),
-                                new Move(Square.C4, Square.B2, 0, false),
-                                new Move(Square.C4, Square.D6, 0, true),
-                                new Move(Square.C4, Square.D2, 0, false),
-                                new Move(Square.C4, Square.E5, 0, false),
-                                new Move(Square.C4, Square.E3, 0, false)
+                                new Move(Square.C4, Square.A3, position),
+                                new Move(Square.C4, Square.A5, position),
+                                new Move(Square.C4, Square.B6, position),
+                                new Move(Square.C4, Square.B2, position),
+                                new Move(Square.C4, Square.D6, position),
+                                new Move(Square.C4, Square.D2, position),
+                                new Move(Square.C4, Square.E5, position),
+                                new Move(Square.C4, Square.E3, position)
                         )),
                 Arguments.of(
-                        "4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1",
+                        fen,
                         Square.G7,
                         Arrays.asList(
-                                new Move(Square.G7, Square.G8, 0, false)
+                                new Move(Square.G7, Square.G8, position)
                         ))
         );
     }
 
     private static Stream<Arguments> legalMovesInPosition() {
+        String fen = "4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1";
+        Position position = PositionGenerator.fromFEN(fen);
         return Stream.of(
                 Arguments.of(
-                        "4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1",
+                        fen,
                         Arrays.asList(
-                                new Move(Square.C2, Square.B1, 0, false),
-                                new Move(Square.C2, Square.C1, 0, false),
-                                new Move(Square.C2, Square.D1, 0, false),
-                                new Move(Square.C2, Square.B2, 0, false),
-                                new Move(Square.C2, Square.D2, 0, false),
-                                new Move(Square.C2, Square.B3, 0, false),
-                                new Move(Square.C2, Square.C3, 0, false),
-                                new Move(Square.C2, Square.D3, 0, false),
-                                new Move(Square.C4, Square.A3, 0, false),
-                                new Move(Square.C4, Square.A5, 0, true),
-                                new Move(Square.C4, Square.B6, 0, false),
-                                new Move(Square.C4, Square.B2, 0, false),
-                                new Move(Square.C4, Square.D6, 0, true),
-                                new Move(Square.C4, Square.D2, 0, false),
-                                new Move(Square.C4, Square.E5, 0, false),
-                                new Move(Square.C4, Square.E3, 0, false),
-                                new Move(Square.G7, Square.G8, 0, false)
+                                new Move(Square.C2, Square.B1,position),
+                                new Move(Square.C2, Square.C1,position),
+                                new Move(Square.C2, Square.D1,position),
+                                new Move(Square.C2, Square.B2,position),
+                                new Move(Square.C2, Square.D2,position),
+                                new Move(Square.C2, Square.B3,position),
+                                new Move(Square.C2, Square.C3,position),
+                                new Move(Square.C2, Square.D3,position),
+                                new Move(Square.C4, Square.A3,position),
+                                new Move(Square.C4, Square.A5,position),
+                                new Move(Square.C4, Square.B6,position),
+                                new Move(Square.C4, Square.B2,position),
+                                new Move(Square.C4, Square.D6,position),
+                                new Move(Square.C4, Square.D2,position),
+                                new Move(Square.C4, Square.E5,position),
+                                new Move(Square.C4, Square.E3,position),
+                                new Move(Square.G7, Square.G8,position)
                         )),
                 Arguments.of(
                         "8/2k2NP1/8/8/8/8/2K1r3/8 w - - 1 1",
                         Arrays.asList(
-                                new Move(Square.C2, Square.B1, 0, false),
-                                new Move(Square.C2, Square.C1, 0, false),
-                                new Move(Square.C2, Square.D1, 0, false),
-                                new Move(Square.C2, Square.B3, 0, false),
-                                new Move(Square.C2, Square.C3, 0, false),
-                                new Move(Square.C2, Square.D3, 0, false)
+                                new Move(Square.C2, Square.B1,position),
+                                new Move(Square.C2, Square.C1,position),
+                                new Move(Square.C2, Square.D1,position),
+                                new Move(Square.C2, Square.B3,position),
+                                new Move(Square.C2, Square.C3,position),
+                                new Move(Square.C2, Square.D3,position)
                         ))
         );
     }

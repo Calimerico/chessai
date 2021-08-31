@@ -42,7 +42,8 @@ public class CheckRuleMovement {
         return isKingInCheckAfterMove;
     }
 
-    public static boolean isKingInCheckAfterMove(Position position, Move move) {
+    public static boolean isKingInCheckAfterMove(Move move) {
+        Position position = move.getPosition();
         return isKingInCheckAfterMove(position, move, position.getPlayerToMove());
     }
 }

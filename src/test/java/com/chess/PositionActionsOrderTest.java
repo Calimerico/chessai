@@ -17,6 +17,6 @@ public class PositionActionsOrderTest {
         //when
         TreeSet<Action> actions = (TreeSet<Action>) position.getActions();
         //then
-        AssertionsForClassTypes.assertThat(actions.headSet(new Move(Square.C4, Square.D6, 0, true)));
+        AssertionsForClassTypes.assertThat(actions.headSet(new Move(Square.C4, Square.D6, position)));
     }
 }

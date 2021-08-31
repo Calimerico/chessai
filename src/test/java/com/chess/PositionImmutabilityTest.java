@@ -11,7 +11,7 @@ public class PositionImmutabilityTest {
         Position position = PositionGenerator.fromFEN("4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1");
         Position startPosition = ((Position) position.deepCopy());
         //when
-        position.newState(new Move(Square.C4, Square.A3, 0, false));
+        position.newState(new Move(Square.C4, Square.A3, position));
         Assertions.assertThat(position.equals(startPosition));
     }
 }

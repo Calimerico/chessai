@@ -37,6 +37,8 @@ public class PuzzleTest {
                 Arguments.of("6k1/5ppp/8/8/4n3/8/PP6/1K3R2 b - - 0 1", Square.E4, Square.D2),
                 Arguments.of("4r3/1k4P1/8/8/2N5/8/2K5/8 w - - 0 1", Square.C4, Square.D6),
                 Arguments.of("8/4k1P1/8/8/3p4/3K4/8/8 w - - 0 1", Square.G7, Square.G8)
+                //--------------------------------------------------------------------
+//                Arguments.of("r1b2r1k/ppq3pp/2pp4/5p2/3bP3/1BP2QP1/PP3PK1/R6R w - - 0 21", Square.H1, Square.H7)
 //                Arguments.of("6k1/2r2p1p/5Pp1/6Q1/8/8/5PPP/6K1 w - - 0 1", Square.G5, Square.H6)
         );
     }

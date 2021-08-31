@@ -1,41 +1,25 @@
 package com.chess;
 
 import com.ai.Action;
-import com.chess.movementrules.CheckRuleMovement;
+import com.chess.moveorder.MoveOrderManager;
+import lombok.Getter;
 import lombok.NonNull;
 
 import java.util.Objects;
 
 public class Move implements Action, Comparable<Move> {
-    Square startingSquare;
-    Square endingSquare;
-    int order;
-
-    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare) {
-        this.startingSquare = startingSquare;
-        this.endingSquare = endingSquare;
-        order = order + startingSquare.ordinal() + endingSquare.ordinal();
-    }
-
-    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, int canCaptureMaterial, boolean isCheck) {
-        this.startingSquare = startingSquare;
-        this.endingSquare = endingSquare;
-        order = canCaptureMaterial * 10000;
-        if (isCheck) {
-            order+=20000;
-        }
-        order = order + startingSquare.ordinal() + endingSquare.ordinal();
-    }
+    private static final MoveOrderManager moveOrderManager = new MoveOrderManager();
+    private final Square startingSquare;
+    private final Square endingSquare;
+    @Getter
+    private final Position position;
+    private final int order;//todo
 
     public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position) {
         this.startingSquare = startingSquare;
         this.endingSquare = endingSquare;
-        this.order = ((int) position.getPieceValueOnSquare(endingSquare)) * 10000;
-        Move move = new Move(startingSquare, endingSquare);
-        if (CheckRuleMovement.isKingInCheckAfterMove(position, move, position.getPlayerToMove().opposite())) {
-            order+=20000;
-        }
-        order = order + startingSquare.ordinal() + endingSquare.ordinal();
+        this.position = position;
+        order = moveOrderManager.getOrder(this) + startingSquare.ordinal() + endingSquare.ordinal();
     }
 
     @Override
