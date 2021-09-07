@@ -9,6 +9,7 @@ public class MoveOrderManager {
     private final List<MoveOrderService> moveOrderServices = Arrays.asList(
             new Check(),
             new Takes(),
+            new QueenInTheCenter(),
             new GivingFreePiece()
     );
 
