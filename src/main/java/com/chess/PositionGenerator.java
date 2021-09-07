@@ -20,6 +20,9 @@ public class PositionGenerator {
         boolean whiteCanCastleKingSide = whiteCastleRight == CastleRight.KING_AND_QUEEN_SIDE || whiteCastleRight == CastleRight.KING_SIDE;
         boolean blackCanCastleQueenSide = blackCastleRight == CastleRight.KING_AND_QUEEN_SIDE || blackCastleRight == CastleRight.QUEEN_SIDE;;
         boolean blackCanCastleKingSide = blackCastleRight == CastleRight.KING_AND_QUEEN_SIDE || blackCastleRight == CastleRight.KING_SIDE;;
+
+        Square whiteKingPosition = null;
+        Square blackKingPosition = null;
         for (com.github.bhlangonijr.chesslib.Square square : com.github.bhlangonijr.chesslib.Square.values()) {
             Square mySquare = Square.fromLibSquare(square);
             com.github.bhlangonijr.chesslib.Piece piece = board.getPiece(square);
@@ -27,6 +30,7 @@ public class PositionGenerator {
                 case NONE:
                     break;
                 case BLACK_KING:
+                    blackKingPosition = mySquare;
                     pieces.put(mySquare, new Piece(Color.BLACK,mySquare, PieceType.KING));
                     break;
                 case BLACK_BISHOP:
@@ -45,6 +49,7 @@ public class PositionGenerator {
                     pieces.put(mySquare, new Piece(Color.BLACK,mySquare, PieceType.ROOK));
                     break;
                 case WHITE_KING:
+                    whiteKingPosition = mySquare;
                     pieces.put(mySquare, new Piece(Color.WHITE,mySquare, PieceType.KING));
                     break;
                 case WHITE_BISHOP:
@@ -74,9 +79,11 @@ public class PositionGenerator {
                 new CastleEntity(
                         whiteCanCastleQueenSide,
                         whiteCanCastleKingSide,
-                        blackCanCastleKingSide,
+                        blackCanCastleQueenSide,
                         blackCanCastleKingSide
-                )
+                ),
+                whiteKingPosition,
+                blackKingPosition
         );
     }
 
@@ -136,7 +143,9 @@ public class PositionGenerator {
                         true,
                         true,
                         true
-                        )
+                        ),
+                Square.E1,
+                Square.E8
         );
     }
 }

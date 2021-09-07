@@ -19,24 +19,32 @@ public class Position implements MiniMaxState {
     Square blackKingPosition;
     int numberOfPieces;
 
-    public Position(Map<Square, Piece> pieces, Color playerToMove, Move lastPlayedMove, CastleEntity castleEntity) {
+    public Position(
+            Map<Square, Piece> pieces,
+            Color playerToMove,
+            Move lastPlayedMove,
+            CastleEntity castleEntity,
+            Square whiteKingPositionInPreviousPosition,
+            Square blackKingPositionInPreviousPosition
+    ) {
         this.pieces = Collections.unmodifiableMap(pieces);
         this.castleEntity = castleEntity;
         this.playerToMove = playerToMove;
         this.lastPlayedMove = lastPlayedMove;
-        //todo extract this check to position generator!!!
-        this.whiteKingPosition = Arrays.stream(Square.values()).filter(square -> {
-            Piece piece = pieces.get(square);
-            return piece != null && piece.getColor() == Color.WHITE && piece.getPieceType() == PieceType.KING;
-        }).findFirst().orElseThrow(() -> {
-            RuntimeException runtimeException = new RuntimeException("There must be white king on he board! Pieces present: " + pieces);
-            return runtimeException;
-        });
-        this.blackKingPosition = Arrays.stream(Square.values()).filter(square -> {
-            Piece piece = pieces.get(square);
-            return piece != null && piece.getColor() == Color.BLACK && piece.getPieceType() == PieceType.KING;
-        }).findFirst().orElseThrow(() -> new RuntimeException("There must be black king on he board! Pieces present: " + pieces));
+        this.whiteKingPosition = calculateKingPosition(whiteKingPositionInPreviousPosition, lastPlayedMove);
+        this.blackKingPosition = calculateKingPosition(blackKingPositionInPreviousPosition, lastPlayedMove);
         this.numberOfPieces = this.pieces.size();
+    }
+
+    private Square calculateKingPosition(Square kingPositionInPreviousPosition, Move lastPlayedMove) {
+        if (lastPlayedMove == null) {
+            return kingPositionInPreviousPosition;
+        }
+        if (lastPlayedMove.getStartingSquare().equals(kingPositionInPreviousPosition)) {
+            return lastPlayedMove.getEndingSquare();
+        } else {
+            return kingPositionInPreviousPosition;
+        }
     }
 
     @Override
@@ -69,7 +77,9 @@ public class Position implements MiniMaxState {
                 piecesInNewPosition,
                 this.playerToMove.opposite(),
                 move,
-                newCastleEntity
+                newCastleEntity,
+                whiteKingPosition,
+                blackKingPosition
         );
     }
 
@@ -112,16 +122,6 @@ public class Position implements MiniMaxState {
             }
         }
         return sum;
-    }
-
-    @Override
-    public State deepCopy() {
-        return new Position(
-                new HashMap<>(pieces),
-                playerToMove,
-                lastPlayedMove,
-                castleEntity
-        );
     }
 
     @Override
