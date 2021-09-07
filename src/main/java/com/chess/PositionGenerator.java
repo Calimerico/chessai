@@ -69,13 +69,14 @@ public class PositionGenerator {
 
         return new Position(
                 pieces,
-                whiteCanCastleQueenSide,
-                whiteCanCastleKingSide,
-                blackCanCastleQueenSide,
-                blackCanCastleKingSide,
                 playerToMove,
                 null,
-                null
+                new CastleEntity(
+                        whiteCanCastleQueenSide,
+                        whiteCanCastleKingSide,
+                        blackCanCastleKingSide,
+                        blackCanCastleKingSide
+                )
         );
     }
 
@@ -127,8 +128,15 @@ public class PositionGenerator {
         pieces.put(Square.H7, new Piece(Color.BLACK, Square.H7, PieceType.PAWN));
 
         return new Position(
-                pieces, true,true,true,true,Color.WHITE, null, Castle.NO_CASTLE
-
+                pieces,
+                Color.WHITE,
+                null,
+                new CastleEntity(
+                        true,
+                        true,
+                        true,
+                        true
+                        )
         );
     }
 }

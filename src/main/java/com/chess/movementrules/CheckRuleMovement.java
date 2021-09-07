@@ -15,7 +15,7 @@ public class CheckRuleMovement {
         for (Square square : Square.values()) {
             Piece piece = newPosition.getPieceAtSquare(square);
             if (piece != null && piece.getPieceType() == PieceType.KING && piece.getColor() == color) {
-                isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color == Color.BLACK ? Color.WHITE : Color.BLACK).contains(piece.getSquare());
+                isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color.opposite()).contains(piece.getSquare());
             }
         }
 
