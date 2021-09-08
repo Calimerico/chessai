@@ -2,35 +2,48 @@ package com.chess;
 
 public class PerformanceMonitor {
 
+    private static boolean enabled = true;
+
+    public synchronized static void enable() {
+        enabled = true;
+    }
+
+    public synchronized static void disable() {
+        enabled = false;
+    }
+
     public static void start() {
         new Thread(() -> {
             try {
                 while (true) {
                     Thread.sleep(5000);
-                    System.out.println("---------------------------");
+                    if (enabled) {
+                        System.out.println("---------------------------");
 
-                    System.out.println("Total number of positions: " + getTotalNumberOfPositions());
-                    System.out.println("\n");
+                        System.out.println("Total number of positions: " + getTotalNumberOfPositions());
+                        System.out.println("\n");
 
-                    System.out.println("Number of calls to isKingInCheck: " + getIsKingInCheckCounter());
-                    System.out.println("Time spent in isKingInCheck in ms: " + getIsKingInCheckTime());
-                    System.out.println("Avg time for isKingInCheck in ns: " + getIsKingInCheckAvgTime());
-                    System.out.println("\n");
+                        System.out.println("Number of calls to isKingInCheck: " + getIsKingInCheckCounter());
+                        System.out.println("Time spent in isKingInCheck in ms: " + getIsKingInCheckTime());
+                        System.out.println("Avg time for isKingInCheck in ns: " + getIsKingInCheckAvgTime());
+                        System.out.println("\n");
 
-                    System.out.println("Number of calls to getAttackingSquares: " + getGetAttackingSquaresCounter());
-                    System.out.println("Time spent in getAttackingSquares in ms: " + getGetAttackingSquaresTime());
-                    System.out.println("Avg time for getAttackingSquares in ns: " + getGetAttackingSquaresAvgTime());
+                        System.out.println("Number of calls to getAttackingSquares: " + getGetAttackingSquaresCounter());
+                        System.out.println("Time spent in getAttackingSquares in ms: " + getGetAttackingSquaresTime());
+                        System.out.println("Avg time for getAttackingSquares in ns: " + getGetAttackingSquaresAvgTime());
 
-                    System.out.println("---------------------------");
-                    totalNumberOfPositions = 0;
+                        System.out.println("---------------------------");
+                        totalNumberOfPositions = 0;
 
-                    isKingInCheckStart = 0;
-                    isKingInCheckCounter = 0;
-                    isKingInCheckTime = 0;
+                        isKingInCheckStart = 0;
+                        isKingInCheckCounter = 0;
+                        isKingInCheckTime = 0;
 
-                    getAttackingSquaresStart = 0;
-                    getAttackingSquaresCounter = 0;
-                    getAttackingSquaresTime = 0;
+                        getAttackingSquaresStart = 0;
+                        getAttackingSquaresCounter = 0;
+                        getAttackingSquaresTime = 0;
+                    }
+
                 }
 
             } catch (InterruptedException e) {

@@ -50,13 +50,12 @@ public class Position implements MiniMaxState {
     @Override
     public Set<Action> getActions() {
         Set<Action> moves = new TreeSet<>();
-        for (Square square : Square.values()) {
-            Piece piece = pieces.get(square);
-            if (piece != null && piece.getColor() == playerToMove) {
+        pieces.values().forEach(piece -> {
+            if (piece.getColor() == playerToMove) {
                 Set<Action> legalMoves = piece.getLegalMoves(this).stream().map(move -> ((Action) move)).collect(Collectors.toSet());
                 moves.addAll(legalMoves);
             }
-        }
+        });
         return moves;
     }
 
@@ -92,9 +91,11 @@ public class Position implements MiniMaxState {
 
     public List<Square> getAttackingSquaresByPlayer(Color color) {
         List<Square> squares = new ArrayList<>();
-        Arrays.stream(Square.values())
-                .map(pieces::get)
-                .filter(piece -> piece != null && piece.getColor() == color).forEach(piece -> squares.addAll(piece.getAttackingSquares(this)));
+        pieces.values().forEach(piece -> {
+            if (piece.getColor() == color) {
+                squares.addAll(piece.getAttackingSquares(this));
+            }
+        });
         return squares;
     }
 
@@ -111,14 +112,11 @@ public class Position implements MiniMaxState {
             }
         }//todo extract somewhere
         double sum = 0.0;
-        for (Square square : Square.values()) {
-            Piece piece = pieces.get(square);
-            if (piece != null) {
-                if (piece.getColor() == Color.WHITE) {
-                    sum+= piece.getPieceType().getValue();
-                } else {
-                    sum-= piece.getPieceType().getValue();
-                }
+        for (Piece piece : pieces.values()) {
+            if (piece.getColor() == Color.WHITE) {
+                sum+= piece.getPieceType().getValue();
+            } else {
+                sum-= piece.getPieceType().getValue();
             }
         }
         return sum;
