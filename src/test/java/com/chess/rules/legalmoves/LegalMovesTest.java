@@ -13,8 +13,10 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class LegalMovesTest {
@@ -31,6 +33,15 @@ public class LegalMovesTest {
         Assertions.assertThat(actions.size()).isEqualTo(moves.size());
     }
 
+    @Test
+    void enPassantTest() {
+        Position position = PositionGenerator.fromFEN("8/3k1p2/8/6P1/8/8/5K2/8 b - - 0 1");
+        Position position1 = position.newState(new Move(Square.F7, Square.F5, position));
+        Assertions.assertThat(position1.getActions().contains(new Move(Square.G5, Square.F6, position1, true)));
+        Position position2 = position1.newState(new Move(Square.G5, Square.F6, position1, true));
+        Assertions.assertThat(position2.getPieces()).doesNotContainKey(Square.F5);
+    }
+
     @ParameterizedTest
     @MethodSource("legalMovesInPosition")
     void legalMovesInPosition(String positionFen, List<Move> moves) {
@@ -41,6 +52,47 @@ public class LegalMovesTest {
         //then
         Assertions.assertThat(actions).containsAll(moves);
         Assertions.assertThat(actions.size()).isEqualTo(moves.size());
+    }
+
+//    @ParameterizedTest
+//    @MethodSource("numberOfLegalMovesByPosition")
+//    void testNumberOfLegalMovesInPosition(String fen, long numberOfExpectedLegalMoves, int depth) {
+//        //given
+//        Position position = PositionGenerator.fromFEN(fen);
+//        //when
+//        long numberOfLegalMoves = calculateNumberOfMoves(position, depth);
+//
+//        //then
+//        Assertions.assertThat(numberOfLegalMoves).isEqualTo(numberOfExpectedLegalMoves);
+//    }
+
+    public long calculateNumberOfMoves(Position position, int depth) {
+        Set<Action> actions = position.getActions();
+        long sizeOnCurrentLevel = actions.size();
+        if (depth == 1) {
+            return sizeOnCurrentLevel;
+        } else {
+            long sizeOnDeeperLevels = 0;
+            for (Action action : actions) {
+                sizeOnDeeperLevels += calculateNumberOfMoves(position.newState(action), depth - 1);
+            }
+            return sizeOnCurrentLevel + sizeOnDeeperLevels;
+        }
+    }
+
+    private static Stream<Arguments> numberOfLegalMovesByPosition() {
+        return Stream.of(
+                Arguments.of(
+                        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+                        4865609,
+                        5
+                ),
+                Arguments.of(
+                        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ",
+                        4085603,
+                        4
+                )
+        );
     }
 
     private static Stream<Arguments> legalMovesFromSquare() {
