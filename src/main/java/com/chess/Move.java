@@ -14,12 +14,18 @@ public class Move implements Action, Comparable<Move> {
     @Getter
     private final Position position;
     private final int order;//todo
+    private final boolean isEnPassant;
 
-    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position) {
+    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position, boolean isEnPassant) {
         this.startingSquare = startingSquare;
         this.endingSquare = endingSquare;
         this.position = position;
+        this.isEnPassant = isEnPassant;
         order = moveOrderManager.getOrder(this) + startingSquare.ordinal() + endingSquare.ordinal();
+    }
+
+    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position) {
+        this(startingSquare, endingSquare, position, false);
     }
 
     @Override
@@ -29,6 +35,10 @@ public class Move implements Action, Comparable<Move> {
 
     public int getOrder() {
         return order;
+    }
+
+    public boolean isEnPassant() {
+        return isEnPassant;
     }
 
     public Square getStartingSquare() {

@@ -71,6 +71,13 @@ public class Position implements MiniMaxState {
         Piece pieceOnOldSquare = getPieces().get(startingSquare);
         piecesInNewPosition.put(move.getEndingSquare(), new Piece(pieceOnOldSquare.getColor(), move.getEndingSquare(), pieceOnOldSquare.getPieceType()));
         piecesInNewPosition.remove(startingSquare);
+        if (move.isEnPassant()) {
+            if (playerToMove == Color.WHITE) {
+                piecesInNewPosition.remove(Square.calculateSquareFromCoordinates(move.getEndingSquare().getFile(), move.getEndingSquare().getRank() - 1));
+            } else {
+                piecesInNewPosition.remove(Square.calculateSquareFromCoordinates(move.getEndingSquare().getFile(), move.getEndingSquare().getRank() + 1));
+            }
+        }
         CastleEntity newCastleEntity = new CastleEntity(startingSquare, endingSquare, this, piecesInNewPosition);
         return new Position(
                 piecesInNewPosition,
