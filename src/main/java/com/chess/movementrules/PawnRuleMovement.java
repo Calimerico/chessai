@@ -18,7 +18,6 @@ public class PawnRuleMovement {
                         square,
                         position
                 ))
-                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
                 .collect(Collectors.toSet());
 
         Color myColor = position.getPieceColorOnSquare(currentSquare);
@@ -26,7 +25,7 @@ public class PawnRuleMovement {
         int rank = currentSquare.getRank();
         int file = currentSquare.getFile();
 
-        //can I move forward
+        //can I move forward by 1 square
         if (myColor == Color.WHITE) {
             Square endingSquare = Square.calculateSquareFromCoordinates(file, rank + 1);
             if (endingSquare != null && position.isSquareEmpty(endingSquare)) {
@@ -42,6 +41,20 @@ public class PawnRuleMovement {
                 if (!CheckRuleMovement.isKingInCheckAfterMove(move)) {
                     legalMoves.add(move);
                 }
+            }
+        }
+
+        //moving by 2 squares
+        if (myColor == Color.WHITE && currentSquare.getRank() == 1) {
+            Square endingSquare = Square.calculateSquareFromCoordinates(file, rank + 2);
+            if (endingSquare != null && position.isSquareEmpty(endingSquare) && position.isSquareEmpty(Square.calculateSquareFromCoordinates(endingSquare.getFile(), endingSquare.getRank() - 1))) {
+                legalMoves.add(new Move(currentSquare, endingSquare, position));
+            }
+        }
+        if (myColor == Color.BLACK && currentSquare.getRank() == 6) {
+            Square endingSquare = Square.calculateSquareFromCoordinates(file, rank - 2);
+            if (endingSquare != null && position.isSquareEmpty(endingSquare) && position.isSquareEmpty(Square.calculateSquareFromCoordinates(endingSquare.getFile(), endingSquare.getRank() + 1))) {
+                legalMoves.add(new Move(currentSquare, endingSquare, position));
             }
         }
 
@@ -72,7 +85,7 @@ public class PawnRuleMovement {
             }
         }
 
-        return legalMoves;
+        return legalMoves.stream().filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move)).collect(Collectors.toSet());
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {

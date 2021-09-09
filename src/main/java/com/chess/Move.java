@@ -21,7 +21,9 @@ public class Move implements Action, Comparable<Move> {
         this.endingSquare = endingSquare;
         this.position = position;
         this.isEnPassant = isEnPassant;
-        order = moveOrderManager.getOrder(this) + startingSquare.ordinal() + endingSquare.ordinal();
+        int ordinalStart = startingSquare.ordinal();
+        int ordinalEnd = endingSquare.ordinal();
+        order = moveOrderManager.getOrder(this) + (ordinalStart + ordinalEnd)*(ordinalStart + ordinalEnd + 1) + ordinalEnd;
     }
 
     public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position) {
@@ -54,9 +56,7 @@ public class Move implements Action, Comparable<Move> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Move move = (Move) o;
-        return order == move.order &&
-                startingSquare == move.startingSquare &&
-                endingSquare == move.endingSquare;
+        return ((Move) o).compareTo(move) == 0;
     }
 
     @Override

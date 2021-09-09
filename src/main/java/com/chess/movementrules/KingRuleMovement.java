@@ -21,19 +21,19 @@ public class KingRuleMovement {
                 .collect(Collectors.toSet());
         //castle
         if (currentSquare == Square.E1) {
-            if (position.isWhiteCanCastleKingSide()) {
+            if (position.isWhiteCanCastleKingSide() && position.isSquareEmpty(Square.F1) && position.isSquareEmpty(Square.G1)) {
                 legalMoves.add(new Move(currentSquare, Square.G1, position));
             }
-            if (position.isWhiteCanCastleQueenSide()) {
+            if (position.isWhiteCanCastleQueenSide() && position.isSquareEmpty(Square.D1) && position.isSquareEmpty(Square.C1) && position.isSquareEmpty(Square.B1)) {
                 legalMoves.add(new Move(currentSquare, Square.C1, position));
 
             }
         }
         if (currentSquare == Square.E8) {
-            if (position.isBlackCanCastleKingSide()) {
+            if (position.isBlackCanCastleKingSide() && position.isSquareEmpty(Square.F8) && position.isSquareEmpty(Square.G8)) {
                 legalMoves.add(new Move(currentSquare, Square.G8, position));
             }
-            if (position.isBlackCanCastleQueenSide()) {
+            if (position.isBlackCanCastleQueenSide() && position.isSquareEmpty(Square.D8) && position.isSquareEmpty(Square.C8) && position.isSquareEmpty(Square.B8)) {
                 legalMoves.add(new Move(currentSquare, Square.C8, position));
             }
         }

@@ -1,6 +1,7 @@
 package com.chess.rules.legalmoves;
 
 import com.ai.Action;
+import com.ai.DummyAction;
 import com.ai.MiniMax;
 import com.chess.*;
 import com.chess.movementrules.KingRuleMovement;
@@ -12,10 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -54,17 +52,99 @@ public class LegalMovesTest {
         Assertions.assertThat(actions.size()).isEqualTo(moves.size());
     }
 
-//    @ParameterizedTest
-//    @MethodSource("numberOfLegalMovesByPosition")
-//    void testNumberOfLegalMovesInPosition(String fen, long numberOfExpectedLegalMoves, int depth) {
-//        //given
-//        Position position = PositionGenerator.fromFEN(fen);
-//        //when
-//        long numberOfLegalMoves = calculateNumberOfMoves(position, depth);
-//
-//        //then
-//        Assertions.assertThat(numberOfLegalMoves).isEqualTo(numberOfExpectedLegalMoves);
-//    }
+    @ParameterizedTest
+    @MethodSource("numberOfLegalMovesByPosition")
+    void testNumberOfLegalMovesInPosition(String fen, long numberOfExpectedLegalMoves, int depth) {
+        //given
+        Position position = PositionGenerator.fromFEN(fen);
+        //when
+        long numberOfLegalMoves = calculateNumberOfMoves(position, depth);
+
+        //then
+        Assertions.assertThat(numberOfLegalMoves).isEqualTo(numberOfExpectedLegalMoves);
+    }
+
+    @Test
+    void name() {
+        //given
+        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+        //when
+        long numberOfLegalMoves = calculateNumberOfMoves(position, 3);
+
+
+//        int counter = 0;
+//        for (Action action : new ArrayList<>(position1.getActions())) {
+//            Set<Action> actions1 = position1.newState(action).getActions();
+//            Square startingSquare = ((Move) action).getStartingSquare();
+//            Square endingSquare = ((Move) action).getEndingSquare();
+//            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
+//            counter += actions1.size();
+//        }
+//        System.out.println("Broj je: " + counter);
+
+        //then
+        Assertions.assertThat(numberOfLegalMoves).isEqualTo(24825);
+    }
+
+    @Test
+    void noviiii() {
+        //given
+        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2");
+        //when
+        long numberOfLegalMoves = calculateNumberOfMoves(position, 2);
+
+
+        int counter = 0;
+        for (Action action : new ArrayList<>(position.getActions())) {
+            Set<Action> actions1 = position.newState(action).getActions();
+            Square startingSquare = ((Move) action).getStartingSquare();
+            Square endingSquare = ((Move) action).getEndingSquare();
+            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
+            counter += actions1.size();
+        }
+        System.out.println("Broj je: " + counter);
+
+        //then
+        Assertions.assertThat(numberOfLegalMoves).isEqualTo(810);
+    }
+
+    @Test
+    void noviiiii() {
+        //given
+        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2");
+        Position position1 = position.newState(new Move(Square.F8, Square.B4, position));
+        //when
+        long numberOfLegalMoves = calculateNumberOfMoves(position1, 1);
+
+
+        int counter = 0;
+        for (Action action : new ArrayList<>(position.getActions())) {
+            Set<Action> actions1 = position.newState(action).getActions();
+            Square startingSquare = ((Move) action).getStartingSquare();
+            Square endingSquare = ((Move) action).getEndingSquare();
+            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
+            counter += actions1.size();
+        }
+        System.out.println("Broj je: " + counter);
+
+        //then
+        Assertions.assertThat(numberOfLegalMoves).isEqualTo(26);
+    }
+
+
+
+    @Test
+    void name3() {
+        //given
+        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
+        //when
+        Set<Action> actions = position.getActions();
+        Position position1 = position.newState(new Move(Square.B8, Square.C6, position));
+        long numberOfLegalMoves = calculateNumberOfMoves(position1, 2);
+
+        //then
+        Assertions.assertThat(numberOfLegalMoves).isEqualTo(835);
+    }
 
     public long calculateNumberOfMoves(Position position, int depth) {
         Set<Action> actions = position.getActions();
@@ -74,9 +154,10 @@ public class LegalMovesTest {
         } else {
             long sizeOnDeeperLevels = 0;
             for (Action action : actions) {
-                sizeOnDeeperLevels += calculateNumberOfMoves(position.newState(action), depth - 1);
+                long sizeOnDeeperLevels1 = calculateNumberOfMoves(position.newState(action), depth - 1);
+                sizeOnDeeperLevels += sizeOnDeeperLevels1;
             }
-            return sizeOnCurrentLevel + sizeOnDeeperLevels;
+            return sizeOnDeeperLevels;
         }
     }
 
