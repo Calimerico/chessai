@@ -10,16 +10,14 @@ import java.util.stream.Collectors;
 public class KnightRuleMovement {
 
     public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
-        Set<Move> moves = getAttackingSquares(position, currentSquare)
+        return getAttackingSquares(position, currentSquare)
                 .stream()
                 .map(square -> new Move(
                         currentSquare,
                         square,
                         position
                 ))
-                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
                 .collect(Collectors.toSet());
-        return moves;
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {

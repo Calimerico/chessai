@@ -99,7 +99,7 @@ public class PawnRuleMovement {
         });
         legalMoves.addAll(underPromotes);
 
-        return legalMoves.stream().filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move)).collect(Collectors.toSet());
+        return legalMoves;
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {

@@ -4,6 +4,8 @@ import com.ai.Action;
 import com.chess.movementrules.*;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,26 +13,36 @@ public class PositionLegalMovesService {
 
     public static Set<Move> getLegalMoves(Position position, Square square) {
         Piece piece = position.getPieceAtSquare(square);
+        Set<Move> legalMoves = Collections.emptySet();
         if (piece != null) {
 
             switch (piece.getPieceType()) {
                 case BISHOP:
-                    return BishopRuleMovement.getLegalMoves(position, square);
+                    legalMoves = BishopRuleMovement.getLegalMoves(position, square);
+                    break;
                 case ROOK:
-                    return RookRuleMovement.getLegalMoves(position, square);
+                    legalMoves = RookRuleMovement.getLegalMoves(position, square);
+                    break;
                 case QUEEN:
-                    return QueenRuleMovement.getLegalMoves(position, square);
+                    legalMoves = QueenRuleMovement.getLegalMoves(position, square);
+                    break;
                 case KNIGHT:
-                    return KnightRuleMovement.getLegalMoves(position, square);
+                    legalMoves = KnightRuleMovement.getLegalMoves(position, square);
+                    break;
                 case PAWN:
-                    return PawnRuleMovement.getLegalMoves(position, square);
+                    legalMoves = PawnRuleMovement.getLegalMoves(position, square);
+                    break;
                 case KING:
-                    return KingRuleMovement.getLegalMoves(position, square);
+                    legalMoves = KingRuleMovement.getLegalMoves(position, square);
+                    break;
                 default:
                     throw new RuntimeException("Piece not recognized!");
             }
         }
-        return Collections.emptySet();
+        return legalMoves
+                .stream()
+                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
+                .collect(Collectors.toSet());
     }
 
     public static Set<Square> getAttackingSquares(Position position, Square square) {

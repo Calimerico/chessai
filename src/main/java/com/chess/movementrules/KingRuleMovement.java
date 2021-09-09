@@ -36,9 +36,7 @@ public class KingRuleMovement {
                 legalMoves.add(new Move(currentSquare, Square.C8, position));
             }
         }
-        return legalMoves.stream()
-                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
-                .collect(Collectors.toSet());
+        return legalMoves;
 
     }
 
