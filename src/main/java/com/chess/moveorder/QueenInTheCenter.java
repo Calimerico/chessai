@@ -12,10 +12,10 @@ public class QueenInTheCenter implements MoveOrderService {
         Position position = move.getPosition();
         if (position.getPieceAtSquare(move.getStartingSquare()).getPieceType() == PieceType.QUEEN) {
             if (move.getEndingSquare().isNarrowCenter()) {
-                return 500;
+                return 100000;
             }
             if (move.getEndingSquare().isEdge()) {
-                return -500;
+                return -100000;
             }
         }
         return 0;

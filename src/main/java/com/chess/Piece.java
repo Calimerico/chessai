@@ -13,11 +13,15 @@ public class Piece implements ZobristValue {
     PieceType pieceType;
 
     public Piece(Color color, Square square, PieceType pieceType) {
+        this(color, square, pieceType, PieceType.QUEEN);
+    }
+
+    public Piece(Color color, Square square, PieceType pieceType, PieceType promoteTo) {
         this.color = color;
         this.square = square;
         if (pieceType == PieceType.PAWN) {
             if ((color == Color.WHITE && square.getRank() == 7) || (color == Color.BLACK && square.getRank() == 0)) {
-                this.pieceType = PieceType.QUEEN;
+                this.pieceType = promoteTo;
             } else {
                 this.pieceType = pieceType;
             }

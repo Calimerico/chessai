@@ -72,18 +72,32 @@ public class PawnRuleMovement {
                     position.getPieceTypeOnSquare(lastPlayedMoveEndingSquare) == PieceType.PAWN
             ) {
                 if (myColor == Color.WHITE) {
-                    Move enPassant = new Move(currentSquare, Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile(), lastPlayedMoveEndingSquare.getRank() + 1), position, true);
+                    Move enPassant = new Move(currentSquare, Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile(), lastPlayedMoveEndingSquare.getRank() + 1), position, true, PieceType.QUEEN);
                     if (!CheckRuleMovement.isKingInCheckAfterMove(enPassant)) {
                         legalMoves.add(enPassant);
                     }
                 } else {
-                    Move enPassant = new Move(currentSquare, Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile(), lastPlayedMoveEndingSquare.getRank() - 1), position, true);
+                    Move enPassant = new Move(currentSquare, Square.calculateSquareFromCoordinates(lastPlayedMoveEndingSquare.getFile(), lastPlayedMoveEndingSquare.getRank() - 1), position, true, PieceType.QUEEN);
                     if (!CheckRuleMovement.isKingInCheckAfterMove(enPassant)) {
                         legalMoves.add(enPassant);
                     }
                 }
             }
         }
+        Set<Move> underPromotes = new HashSet<>();
+        legalMoves.forEach(move -> {
+            if (myColor == Color.WHITE && move.getEndingSquare().getRank() == 7) {
+                underPromotes.add(new Move(move.getStartingSquare(), move.getEndingSquare(),position, move.isEnPassant(), PieceType.KNIGHT));
+                underPromotes.add(new Move(move.getStartingSquare(), move.getEndingSquare(),position, move.isEnPassant(), PieceType.ROOK));
+                underPromotes.add(new Move(move.getStartingSquare(), move.getEndingSquare(),position, move.isEnPassant(), PieceType.BISHOP));
+            }
+            if (myColor == Color.BLACK && move.getEndingSquare().getRank() == 0) {
+                underPromotes.add(new Move(move.getStartingSquare(), move.getEndingSquare(),position, move.isEnPassant(), PieceType.KNIGHT));
+                underPromotes.add(new Move(move.getStartingSquare(), move.getEndingSquare(),position, move.isEnPassant(), PieceType.ROOK));
+                underPromotes.add(new Move(move.getStartingSquare(), move.getEndingSquare(),position, move.isEnPassant(), PieceType.BISHOP));
+            }
+        });
+        legalMoves.addAll(underPromotes);
 
         return legalMoves.stream().filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move)).collect(Collectors.toSet());
     }

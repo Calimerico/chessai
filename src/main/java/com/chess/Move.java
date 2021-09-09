@@ -15,19 +15,21 @@ public class Move implements Action, Comparable<Move> {
     private final Position position;
     private final int order;//todo
     private final boolean isEnPassant;
+    private final PieceType promoteTo;
 
-    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position, boolean isEnPassant) {
+    public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position, boolean isEnPassant, PieceType promoteTo) {
         this.startingSquare = startingSquare;
         this.endingSquare = endingSquare;
         this.position = position;
         this.isEnPassant = isEnPassant;
         int ordinalStart = startingSquare.ordinal();
         int ordinalEnd = endingSquare.ordinal();
-        order = moveOrderManager.getOrder(this) + (ordinalStart + ordinalEnd)*(ordinalStart + ordinalEnd + 1) + ordinalEnd;
+        this.promoteTo = promoteTo;
+        order = moveOrderManager.getOrder(this) + (ordinalStart + ordinalEnd)*(ordinalStart + ordinalEnd + 1) + ordinalEnd + (int)(promoteTo.getValue() * 20000) + (promoteTo == PieceType.KNIGHT ? 1000: 0);
     }
 
     public Move(@NonNull Square startingSquare, @NonNull Square endingSquare, Position position) {
-        this(startingSquare, endingSquare, position, false);
+        this(startingSquare, endingSquare, position, false, PieceType.QUEEN);
     }
 
     @Override
@@ -37,6 +39,10 @@ public class Move implements Action, Comparable<Move> {
 
     public int getOrder() {
         return order;
+    }
+
+    public PieceType getPromoteTo() {
+        return promoteTo;
     }
 
     public boolean isEnPassant() {

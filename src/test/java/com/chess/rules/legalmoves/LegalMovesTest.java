@@ -1,12 +1,7 @@
 package com.chess.rules.legalmoves;
 
 import com.ai.Action;
-import com.ai.DummyAction;
-import com.ai.MiniMax;
 import com.chess.*;
-import com.chess.movementrules.KingRuleMovement;
-import com.chess.movementrules.KnightRuleMovement;
-import com.chess.movementrules.PawnRuleMovement;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +9,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.*;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class LegalMovesTest {
@@ -35,8 +29,8 @@ public class LegalMovesTest {
     void enPassantTest() {
         Position position = PositionGenerator.fromFEN("8/3k1p2/8/6P1/8/8/5K2/8 b - - 0 1");
         Position position1 = position.newState(new Move(Square.F7, Square.F5, position));
-        Assertions.assertThat(position1.getActions().contains(new Move(Square.G5, Square.F6, position1, true)));
-        Position position2 = position1.newState(new Move(Square.G5, Square.F6, position1, true));
+        Assertions.assertThat(position1.getActions().contains(new Move(Square.G5, Square.F6, position1, true, PieceType.QUEEN)));
+        Position position2 = position1.newState(new Move(Square.G5, Square.F6, position1, true, PieceType.QUEEN));
         Assertions.assertThat(position2.getPieces()).doesNotContainKey(Square.F5);
     }
 
@@ -64,88 +58,6 @@ public class LegalMovesTest {
         Assertions.assertThat(numberOfLegalMoves).isEqualTo(numberOfExpectedLegalMoves);
     }
 
-    @Test
-    void name() {
-        //given
-        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
-        //when
-        long numberOfLegalMoves = calculateNumberOfMoves(position, 3);
-
-
-//        int counter = 0;
-//        for (Action action : new ArrayList<>(position1.getActions())) {
-//            Set<Action> actions1 = position1.newState(action).getActions();
-//            Square startingSquare = ((Move) action).getStartingSquare();
-//            Square endingSquare = ((Move) action).getEndingSquare();
-//            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
-//            counter += actions1.size();
-//        }
-//        System.out.println("Broj je: " + counter);
-
-        //then
-        Assertions.assertThat(numberOfLegalMoves).isEqualTo(24825);
-    }
-
-    @Test
-    void noviiii() {
-        //given
-        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2");
-        //when
-        long numberOfLegalMoves = calculateNumberOfMoves(position, 2);
-
-
-        int counter = 0;
-        for (Action action : new ArrayList<>(position.getActions())) {
-            Set<Action> actions1 = position.newState(action).getActions();
-            Square startingSquare = ((Move) action).getStartingSquare();
-            Square endingSquare = ((Move) action).getEndingSquare();
-            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
-            counter += actions1.size();
-        }
-        System.out.println("Broj je: " + counter);
-
-        //then
-        Assertions.assertThat(numberOfLegalMoves).isEqualTo(810);
-    }
-
-    @Test
-    void noviiiii() {
-        //given
-        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2");
-        Position position1 = position.newState(new Move(Square.F8, Square.B4, position));
-        //when
-        long numberOfLegalMoves = calculateNumberOfMoves(position1, 1);
-
-
-        int counter = 0;
-        for (Action action : new ArrayList<>(position.getActions())) {
-            Set<Action> actions1 = position.newState(action).getActions();
-            Square startingSquare = ((Move) action).getStartingSquare();
-            Square endingSquare = ((Move) action).getEndingSquare();
-            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
-            counter += actions1.size();
-        }
-        System.out.println("Broj je: " + counter);
-
-        //then
-        Assertions.assertThat(numberOfLegalMoves).isEqualTo(26);
-    }
-
-
-
-    @Test
-    void name3() {
-        //given
-        Position position = PositionGenerator.fromFEN("rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2");
-        //when
-        Set<Action> actions = position.getActions();
-        Position position1 = position.newState(new Move(Square.B8, Square.C6, position));
-        long numberOfLegalMoves = calculateNumberOfMoves(position1, 2);
-
-        //then
-        Assertions.assertThat(numberOfLegalMoves).isEqualTo(835);
-    }
-
     public long calculateNumberOfMoves(Position position, int depth) {
         Set<Action> actions = position.getActions();
         long sizeOnCurrentLevel = actions.size();
@@ -163,17 +75,58 @@ public class LegalMovesTest {
 
     private static Stream<Arguments> numberOfLegalMovesByPosition() {
         return Stream.of(
+//                Arguments.of(
+//                        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+//                        4865609,
+//                        5
+//                ),
                 Arguments.of(
-                        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-                        4865609,
-                        5
+                        "rnbqkbnr/pppp1ppp/8/4p3/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+                        810,
+                        2
                 ),
                 Arguments.of(
-                        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ",
-                        4085603,
-                        4
+                        "rnbqk1nr/pppp1ppp/8/4p3/1b2P3/P7/1PPP1PPP/RNBQKBNR w KQkq - 1 3",
+                        26,
+                        1
+                ),
+                Arguments.of(
+                        "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+                        835,
+                        2
+                ),
+                Arguments.of(
+                        "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8  ",
+                        1486,
+                        2
+                ),
+                Arguments.of(
+                        "rnNq1k1r/pp2bppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R b KQ - 0 8",
+                        1607,
+                        2
+                ),
+                Arguments.of(
+                        "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+                        24825,
+                        3
+                ),
+                Arguments.of(
+                        "rnNq1k1r/pp2bppp/2p5/8/2B5/8/PPP1N1PP/RNBnK2R w KQ - 0 9",
+                        37,
+                        1
+                ),
+                Arguments.of(
+                        "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8  ",
+                        62379,
+                        3
                 )
+                //                Arguments.of(//todo under promote
+//                        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ",
+//                        4085603,
+//                        4
+//                ),
         );
+
     }
 
     private static Stream<Arguments> legalMovesFromSquare() {
@@ -210,7 +163,10 @@ public class LegalMovesTest {
                         fen,
                         Square.G7,
                         Arrays.asList(
-                                new Move(Square.G7, Square.G8, position)
+                                new Move(Square.G7, Square.G8, position, false, PieceType.KNIGHT),
+                                new Move(Square.G7, Square.G8, position, false, PieceType.ROOK),
+                                new Move(Square.G7, Square.G8, position, false, PieceType.BISHOP),
+                                new Move(Square.G7, Square.G8, position, false, PieceType.QUEEN)
                         ))
         );
     }
@@ -238,7 +194,10 @@ public class LegalMovesTest {
                                 new Move(Square.C4, Square.D2,position),
                                 new Move(Square.C4, Square.E5,position),
                                 new Move(Square.C4, Square.E3,position),
-                                new Move(Square.G7, Square.G8,position)
+                                new Move(Square.G7, Square.G8,position, false, PieceType.KNIGHT),
+                                new Move(Square.G7, Square.G8,position, false, PieceType.ROOK),
+                                new Move(Square.G7, Square.G8,position, false, PieceType.BISHOP),
+                                new Move(Square.G7, Square.G8,position, false, PieceType.QUEEN)
                         )),
                 Arguments.of(
                         "8/2k2NP1/8/8/8/8/2K1r3/8 w - - 1 1",

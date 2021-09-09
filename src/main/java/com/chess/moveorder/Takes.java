@@ -22,16 +22,16 @@ public class Takes implements MoveOrderService {
         }
         Square startingSquare = move.getStartingSquare();
         if (position.getPieceTypeOnSquare(startingSquare) == PieceType.KING) {
-            return (int) (pieceValueOnEndingSquareSquare * 1000);
+            return (int) (pieceValueOnEndingSquareSquare * 300000);
         }
         double diff = pieceValueOnEndingSquareSquare - position.getPieceValueOnSquare(startingSquare);
         //if ending square is defended
         boolean endingSquareDefended = position.getAttackingSquaresByPlayer(position.getPlayerToMove().opposite()).contains(endingSquare);
         if (endingSquareDefended && diff > 0) {
-            return (int) (diff*1000);
+            return (int) (diff*300000);
         }
         if (!endingSquareDefended) {
-            return (int) (diff*1000);
+            return (int) (diff*300000);
         }
         return 0;
     }

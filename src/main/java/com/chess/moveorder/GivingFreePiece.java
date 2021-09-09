@@ -15,7 +15,7 @@ public class GivingFreePiece implements MoveOrderService {
         //if ending square is defended
         boolean endingSquareDefended = position.getAttackingSquaresByPlayer(position.getPlayerToMove().opposite()).contains(endingSquare);
         if (endingSquareDefended && diff < 0) {
-            return (int) (diff*1000);
+            return (int) (diff*300000);
         }
         return 0;
     }

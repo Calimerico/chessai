@@ -69,7 +69,7 @@ public class Position implements MiniMaxState {
         HashMap<Square, Piece> piecesInNewPosition = new HashMap<>(getPieces());
 
         Piece pieceOnOldSquare = getPieces().get(startingSquare);
-        piecesInNewPosition.put(move.getEndingSquare(), new Piece(pieceOnOldSquare.getColor(), move.getEndingSquare(), pieceOnOldSquare.getPieceType()));
+        piecesInNewPosition.put(move.getEndingSquare(), new Piece(pieceOnOldSquare.getColor(), move.getEndingSquare(), pieceOnOldSquare.getPieceType(), move.getPromoteTo()));
         piecesInNewPosition.remove(startingSquare);
         if (move.isEnPassant()) {
             if (playerToMove == Color.WHITE) {

@@ -19,52 +19,52 @@ class CastleEntity {
     }
 
     public CastleEntity(Square startingSquare, Square endingSquare, Position position, Map<Square, Piece> pieces) {
-        boolean newWhiteCanCastleKingSide = position.getCastleEntity().isWhiteCanCastleKingSide();
-        boolean newWhiteCanCastleQueenSide = position.getCastleEntity().isWhiteCanCastleQueenSide();
-        boolean newBlackCanCastleKingSide = position.getCastleEntity().isBlackCanCastleKingSide();
-        boolean newBlackCanCastleQueenSide = position.getCastleEntity().isBlackCanCastleQueenSide();
+        whiteCanCastleKingSide = position.getCastleEntity().isWhiteCanCastleKingSide();
+        whiteCanCastleQueenSide = position.getCastleEntity().isWhiteCanCastleQueenSide();
+        blackCanCastleKingSide = position.getCastleEntity().isBlackCanCastleKingSide();
+        blackCanCastleQueenSide = position.getCastleEntity().isBlackCanCastleQueenSide();
 
         if (position.getPieceTypeOnSquare(startingSquare) == PieceType.KING && position.getPieceColorOnSquare(startingSquare) == Color.WHITE) {
             //white king moving, loosing right to castle
-            newWhiteCanCastleKingSide = false;
-            newWhiteCanCastleQueenSide = false;
+            whiteCanCastleKingSide = false;
+            whiteCanCastleQueenSide = false;
         }
         if (position.getPieceTypeOnSquare(startingSquare) == PieceType.KING && position.getPieceColorOnSquare(startingSquare) == Color.BLACK) {
             //black king moving, loosing right to castle
-            newBlackCanCastleKingSide = false;
-            newBlackCanCastleQueenSide = false;
+            blackCanCastleKingSide = false;
+            blackCanCastleQueenSide = false;
         }
         if (startingSquare == Square.A1) {
             //A1 rook moves, white loose right to castle queenside
-            newWhiteCanCastleQueenSide = false;
+            whiteCanCastleQueenSide = false;
         }
         if (startingSquare == Square.H1) {
             //A8 rook moves, white loose right to castle kingside
-            newWhiteCanCastleKingSide = false;
+            whiteCanCastleKingSide = false;
         }
         if (startingSquare == Square.A8) {
             //H1 rook moves, black loose right to castle queenside
-            newBlackCanCastleQueenSide = false;
+            blackCanCastleQueenSide = false;
         }
         if (startingSquare == Square.H8) {
             //H8 rook moves, black loose right to castle kingside
-            newBlackCanCastleKingSide = false;
+            blackCanCastleKingSide = false;
         }
         if (endingSquare == Square.A1) {
             //queens rook captured, white cannot castle on that side
-            newWhiteCanCastleQueenSide = false;
-        }
-        if (endingSquare == Square.A8) {
-            //king rook captured, white cannot castle on that side
-            newWhiteCanCastleKingSide = false;
+            whiteCanCastleQueenSide = false;
         }
         if (endingSquare == Square.H1) {
+            //king rook captured, white cannot castle on that side
+            whiteCanCastleKingSide = false;
+        }
+        if (endingSquare == Square.A8) {
             //queens rook captured, black cannot castle on that side
-            newBlackCanCastleQueenSide = false;
+            blackCanCastleQueenSide = false;
         }
         if (endingSquare == Square.H8) {
             //king rook captured, black cannot castle on that side
-            newBlackCanCastleKingSide = false;
+            blackCanCastleKingSide = false;
         }
         Castle isLastMoveCastle = Castle.NO_CASTLE;
         if (isCastle(position, startingSquare, endingSquare)) {
