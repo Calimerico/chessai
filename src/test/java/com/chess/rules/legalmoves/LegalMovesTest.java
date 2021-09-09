@@ -75,6 +75,7 @@ public class LegalMovesTest {
 
     private static Stream<Arguments> numberOfLegalMovesByPosition() {
         return Stream.of(
+                //todo too slow but should work!
 //                Arguments.of(
 //                        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
 //                        4865609,
