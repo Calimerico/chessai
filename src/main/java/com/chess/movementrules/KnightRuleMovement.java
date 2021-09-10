@@ -2,6 +2,7 @@ package com.chess.movementrules;
 
 import com.chess.*;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
@@ -22,7 +23,7 @@ public class KnightRuleMovement {
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {
         Color myColor = position.getPieceColorOnSquare(currentSquare);
-        Set<Square> attackingSquares = new HashSet<>();
+        Set<Square> attackingSquares = EnumSet.noneOf(Square.class);
 
         int rank = currentSquare.getRank();
         int file = currentSquare.getFile();

@@ -2,6 +2,7 @@ package com.chess.movementrules;
 
 import com.chess.*;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,7 +44,7 @@ public class KingRuleMovement {
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {
 
             Color myColor = position.getPieceColorOnSquare(currentSquare);
-        Set<Square> attackingSquares = new HashSet<>();
+        Set<Square> attackingSquares = EnumSet.noneOf(Square.class);
 
         int rank = currentSquare.getRank();
         int file = currentSquare.getFile();

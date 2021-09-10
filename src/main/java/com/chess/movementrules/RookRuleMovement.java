@@ -2,6 +2,7 @@ package com.chess.movementrules;
 
 import com.chess.*;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class RookRuleMovement {
 
     public static Set<Square> getAttackingSquares(Position position, Square currentSquare) {
         Color myColor = position.getPieceColorOnSquare(currentSquare);
-        Set<Square> legalMoves = new HashSet<>();
+        Set<Square> legalMoves = EnumSet.noneOf(Square.class);
 
         int rank = currentSquare.getRank();
         int file = currentSquare.getFile();
