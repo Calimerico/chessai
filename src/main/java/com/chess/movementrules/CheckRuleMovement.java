@@ -9,14 +9,11 @@ public class CheckRuleMovement {
 
     public static boolean isKingInCheckAfterMove(Position position, Move move, Color color) {
         PerformanceMonitor.isKingInCheckStart();
-        boolean isKingInCheckAfterMove = false;
+        boolean isKingInCheckAfterMove;
         Position newPosition = position.newState(move);
 
-        for (Piece piece : newPosition.getPieces().values()) {
-            if (piece.getPieceType() == PieceType.KING && piece.getColor() == color) {
-                isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color.opposite()).contains(piece.getSquare());
-            }
-        }
+        Piece piece = newPosition.getPieces().get(newPosition.getKingPosition(color));
+        isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color.opposite()).contains(piece.getSquare());
 
         //check castle check
         Castle castle = newPosition.getIsLastMoveCastle();
