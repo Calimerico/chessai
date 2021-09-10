@@ -4,7 +4,7 @@ import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.CastleRight;
 import com.github.bhlangonijr.chesslib.Side;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class PositionGenerator {
@@ -13,7 +13,7 @@ public class PositionGenerator {
         Board board = new Board();
         board.loadFromFen(FEN);
         Color playerToMove = Color.fromSide(board.getSideToMove());
-        Map<Square, Piece> pieces = new HashMap<>();
+        Map<Square, Piece> pieces = new EnumMap<>(Square.class);
         CastleRight whiteCastleRight = board.getCastleRight().get(Side.WHITE);
         CastleRight blackCastleRight = board.getCastleRight().get(Side.BLACK);
         boolean whiteCanCastleQueenSide = whiteCastleRight == CastleRight.KING_AND_QUEEN_SIDE || whiteCastleRight == CastleRight.QUEEN_SIDE;
@@ -96,7 +96,7 @@ public class PositionGenerator {
     }
 
     public static Position initialPosition() {
-        HashMap<Square, Piece> pieces = new HashMap<>();
+        EnumMap<Square, Piece> pieces = new EnumMap<>(Square.class);
         pieces.put(Square.A1, new Piece(Color.WHITE,Square.A1, PieceType.ROOK));
         pieces.put(Square.B1, new Piece(Color.WHITE,Square.B1, PieceType.KNIGHT));
         pieces.put(Square.C1, new Piece(Color.WHITE,Square.C1, PieceType.BISHOP));

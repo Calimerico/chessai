@@ -27,7 +27,7 @@ public class Position implements MiniMaxState {
             Square whiteKingPositionInPreviousPosition,
             Square blackKingPositionInPreviousPosition
     ) {
-        this.pieces = Collections.unmodifiableMap(pieces);
+        this.pieces = pieces;
         this.castleEntity = castleEntity;
         this.playerToMove = playerToMove;
         this.lastPlayedMove = lastPlayedMove;
@@ -66,7 +66,7 @@ public class Position implements MiniMaxState {
 
         Square startingSquare = move.getStartingSquare();
         Square endingSquare = move.getEndingSquare();
-        HashMap<Square, Piece> piecesInNewPosition = new HashMap<>(getPieces());
+        EnumMap<Square, Piece> piecesInNewPosition = new EnumMap<>(getPieces());
 
         Piece pieceOnOldSquare = getPieces().get(startingSquare);
         piecesInNewPosition.put(move.getEndingSquare(), new Piece(pieceOnOldSquare.getColor(), move.getEndingSquare(), pieceOnOldSquare.getPieceType(), move.getPromoteTo()));
