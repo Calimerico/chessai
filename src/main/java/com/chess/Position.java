@@ -4,6 +4,9 @@ import com.ai.Action;
 import com.ai.MiniMaxState;
 import com.ai.State;
 import com.ai.ZobristValue;
+import com.chess.heuristic.HeuristicManager;
+import com.chess.heuristic.InsufficientMaterial;
+import com.chess.moveorder.MoveOrderManager;
 import lombok.Getter;
 
 import java.util.*;
@@ -11,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Getter //todo wtf ddd getter
 public class Position implements MiniMaxState {
+    private static final HeuristicManager heuristicManager = new HeuristicManager();
     Map<Square, Piece> pieces;
     CastleEntity castleEntity;
     Color playerToMove;
@@ -108,25 +112,22 @@ public class Position implements MiniMaxState {
 
     @Override
     public double getHeuristicFunction() {
-        if (insufficientMaterial()) {
+        if (InsufficientMaterial.isInsufficient(this)) {
             return 0;
         }
         if (getActions().isEmpty()) {
             if (isKingInCheck()) {
-                return -900000;
+                if (playerToMove == Color.WHITE) {
+                    return -900000;
+                } else {
+                    return 900000;
+                }
             } else {
                 return 0;
             }
         }//todo extract somewhere
-        double sum = 0.0;
-        for (Piece piece : pieces.values()) {
-            if (piece.getColor() == Color.WHITE) {
-                sum+= piece.getPieceType().getValue();
-            } else {
-                sum-= piece.getPieceType().getValue();
-            }
-        }
-        return sum;
+
+        return heuristicManager.getHeuristic(this);
     }
 
     @Override
@@ -242,52 +243,6 @@ public class Position implements MiniMaxState {
 //        }
 //    }
 
-    private boolean containsKnight() {
-        return getPieces()
-                .values()
-                .stream()
-                .anyMatch(piece -> piece.getPieceType() == PieceType.KNIGHT);
-    }
-
-    private boolean containsBishop() {
-        return getPieces()
-                .values()
-                .stream()
-                .anyMatch(piece -> piece.getPieceType() == PieceType.BISHOP);
-    }
-
-    private boolean containsKnight(Color color) {
-        return getPieces()
-                .values()
-                .stream()
-                .anyMatch(piece -> piece.getPieceType() == PieceType.KNIGHT && piece.getColor() == color);
-    }
-
-    private boolean containsBishop(Color color) {
-        return getPieces()
-                .values()
-                .stream()
-                .anyMatch(piece -> piece.getPieceType() == PieceType.BISHOP && piece.getColor() == color);
-    }
-
-    private long getNumberOfPieces(Color color) {
-        return getPieces().values().stream().filter(piece -> piece.getColor() == color).count();
-    }
-
-
-    public boolean insufficientMaterial() {
-        return
-                        getNumberOfPieces() == 2 ||
-                        (getNumberOfPieces() == 3 && containsBishop()) ||
-                        (getNumberOfPieces() == 3 && containsKnight()) ||
-                        (
-                                getNumberOfPieces(Color.WHITE) == 2 &&
-                                getNumberOfPieces(Color.BLACK) == 2 &&
-                                (containsKnight(Color.WHITE) || containsBishop(Color.WHITE)) && (containsKnight(Color.BLACK) || containsBishop(Color.BLACK))
-                        )
-
-                ;
-    }
 
     public boolean isWhiteCanCastleKingSide() {
         return getCastleEntity().isWhiteCanCastleKingSide();
