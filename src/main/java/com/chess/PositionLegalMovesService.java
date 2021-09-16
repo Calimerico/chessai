@@ -41,7 +41,17 @@ public class PositionLegalMovesService {
         }
         return legalMoves
                 .stream()
-                .filter(move -> !CheckRuleMovement.isKingInCheckAfterMove(move))
+                .filter(move -> {
+                    Square endingSquare = move.getEndingSquare();
+                    boolean notInCheckAfterMoveAndNotCaptureItsOwnPiece = !CheckRuleMovement.isKingInCheckAfterMove(move) &&
+                            position.getPieceColorOnSquare(endingSquare) != position.getPlayerToMove();
+                    if(position.getPieceTypeOnSquare(square) == PieceType.PAWN && endingSquare.getFile() != move.getStartingSquare().getFile()) {
+                        Piece pieceAtEndingSquare = position.getPieceAtSquare(endingSquare);
+                        return pieceAtEndingSquare != null && pieceAtEndingSquare.getColor() != position.getPlayerToMove() && notInCheckAfterMoveAndNotCaptureItsOwnPiece;
+                    }
+
+                    return notInCheckAfterMoveAndNotCaptureItsOwnPiece;
+                })
                 .collect(Collectors.toSet());
     }
 

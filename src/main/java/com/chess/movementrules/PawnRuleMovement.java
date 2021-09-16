@@ -136,8 +136,8 @@ public class PawnRuleMovement {
 
     private static void addCaptureIffPossible(Position position, Color myColor, Set<Square> attackingSquares, Square endingSquare) {
         Piece pieceToCapture = position.getPieces().get(endingSquare);
-        if (pieceToCapture != null && pieceToCapture.getColor() != myColor) {
+//        if (pieceToCapture != null && pieceToCapture.getColor() != myColor) {
             attackingSquares.add(endingSquare);
-        }
+//        }
     }
 }

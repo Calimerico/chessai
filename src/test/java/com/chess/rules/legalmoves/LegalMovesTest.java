@@ -54,6 +54,31 @@ public class LegalMovesTest {
         //when
         long numberOfLegalMoves = calculateNumberOfMoves(position, depth);
 
+
+        for (Action action : new ArrayList<>(position.getActions())) {
+            Set<Action> actions1 = position.newState(action).getActions();
+            Square startingSquare = ((Move) action).getStartingSquare();
+            Square endingSquare = ((Move) action).getEndingSquare();
+            System.out.println(" " + startingSquare + endingSquare + ": " + actions1.size());
+        }
+
+
+
+//        for (Action action : new ArrayList<>(position.getActions())) {
+//            Position position1 = position.newState(action);
+//            Set<Action> actions1 = position1.getActions();
+//            int innerCounter = 0;
+//            for (Action action1 : actions1) {
+//                Square startingSquare1 = ((Move) action1).getStartingSquare();
+//                Square endingSquare1 = ((Move) action1).getEndingSquare();
+//                Position position2 = position1.newState(new Move(startingSquare1, endingSquare1, position1));
+//                innerCounter += position2.getActions().size();
+//            }
+//            Square startingSquare = ((Move) action).getStartingSquare();
+//            Square endingSquare = ((Move) action).getEndingSquare();
+//            System.out.println(" " + startingSquare + endingSquare + ": " + innerCounter);
+//        }
+
         //then
         Assertions.assertThat(numberOfLegalMoves).isEqualTo(numberOfExpectedLegalMoves);
     }
@@ -110,6 +135,16 @@ public class LegalMovesTest {
                         "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
                         24825,
                         3
+                ),
+                Arguments.of(
+                        "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+                        1103,
+                        2
+                ),
+                Arguments.of(
+                        "rnbqkbnr/pppp1ppp/8/4p3/4P1Q1/8/PPPP1PPP/RNB1KBNR b KQkq - 1 2",
+                        1120,
+                        2
                 ),
                 Arguments.of(
                         "rnNq1k1r/pp2bppp/2p5/8/2B5/8/PPP1N1PP/RNBnK2R w KQ - 0 9",

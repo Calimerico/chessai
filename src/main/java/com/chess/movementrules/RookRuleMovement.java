@@ -52,14 +52,9 @@ public class RookRuleMovement {
         Square endingSquare = Square.calculateSquareFromCoordinates(f, r);
 
         Piece pieceOnEndingSquare = position.getPieceAtSquare(endingSquare);
-        if (pieceOnEndingSquare != null) {
-            if (pieceOnEndingSquare.getColor() != myColor) {
-                legalMoves.add(endingSquare);
-            }
-            return true;
-        } else {
-            legalMoves.add(endingSquare);
-        }
-        return false;
+        legalMoves.add(endingSquare);
+        //            if (pieceOnEndingSquare.getColor() != myColor) {
+        //            }
+        return pieceOnEndingSquare != null;
     }
 }

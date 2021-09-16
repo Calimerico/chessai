@@ -61,10 +61,10 @@ public class KingRuleMovement {
 
     private static void addEndingSquareIfAppropriate(Position position, Color myColor, Set<Square> legalMoves, Square endingSquare) {
         if (endingSquare != null) {
-            Piece pieceOnEndingSquare = position.getPieceAtSquare(endingSquare);
-            if (pieceOnEndingSquare == null || pieceOnEndingSquare.getColor() != myColor) {
+//            Piece pieceOnEndingSquare = position.getPieceAtSquare(endingSquare);
+//            if (pieceOnEndingSquare == null || pieceOnEndingSquare.getColor() != myColor) {
                 legalMoves.add(endingSquare);
-            }
+//            }
         }
     }
 }

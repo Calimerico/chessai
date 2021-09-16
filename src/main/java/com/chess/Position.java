@@ -189,7 +189,8 @@ public class Position implements MiniMaxState {
     }
 
     public Color getPieceColorOnSquare(Square square) {
-        return getPieceAtSquare(square).getColor();
+        Piece pieceAtSquare = getPieceAtSquare(square);
+        return pieceAtSquare == null ? null : pieceAtSquare.getColor();
     }
 
     public PieceType getPieceTypeOnSquare(Square square) {
