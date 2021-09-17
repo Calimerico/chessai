@@ -22,6 +22,8 @@ public class Position implements MiniMaxState {
     Square whiteKingPosition;
     Square blackKingPosition;
     int numberOfPieces;
+    Set<Square> attSquaresByBlack;
+    Set<Square> attSquaresByWhite;
     Set<Action> actions;
     Integer actionsSize;
 
@@ -115,13 +117,27 @@ public class Position implements MiniMaxState {
 
 
     public Set<Square> getAttackingSquaresByPlayer(Color color) {
-        Set<Square> squares = EnumSet.noneOf(Square.class);
-        pieces.values().forEach(piece -> {
-            if (piece.getColor() == color) {
-                squares.addAll(piece.getAttackingSquares(this));
+        if (color == Color.WHITE) {
+            if (attSquaresByWhite == null) {
+                attSquaresByWhite = EnumSet.noneOf(Square.class);
+                pieces.values().forEach(piece -> {
+                    if (piece.getColor() == color) {
+                        attSquaresByWhite.addAll(piece.getAttackingSquares(this));
+                    }
+                });
             }
-        });
-        return squares;
+            return attSquaresByWhite;
+        } else {
+            if (attSquaresByBlack == null) {
+                attSquaresByBlack = EnumSet.noneOf(Square.class);
+                pieces.values().forEach(piece -> {
+                    if (piece.getColor() == color) {
+                        attSquaresByBlack.addAll(piece.getAttackingSquares(this));
+                    }
+                });
+            }
+            return attSquaresByBlack;
+        }
     }
 
     @Override
