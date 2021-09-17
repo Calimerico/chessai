@@ -114,8 +114,8 @@ public class Position implements MiniMaxState {
 
 
 
-    public List<Square> getAttackingSquaresByPlayer(Color color) {
-        List<Square> squares = new ArrayList<>();
+    public Set<Square> getAttackingSquaresByPlayer(Color color) {
+        Set<Square> squares = EnumSet.noneOf(Square.class);
         pieces.values().forEach(piece -> {
             if (piece.getColor() == color) {
                 squares.addAll(piece.getAttackingSquares(this));
@@ -224,40 +224,6 @@ public class Position implements MiniMaxState {
     public boolean isSquareEmpty(Square square) {
         return getPieces().get(square) == null;
     }
-
-    public boolean isSquareAttackedBy(Color color, Square square) {
-        //todo improve performance, we need to cache which squares are attacked by which player in position!
-        return getAttackingSquaresByPlayer(color).contains(square);
-    }
-
-//    public boolean isNotCheckForCastle(Castle castle, Color color) {
-//        if (color == Color.WHITE) {
-//            if (castle == Castle.KING) {
-//                return
-//                        isSquareAttackedBy(Color.BLACK, Square.E1) ||
-//                        isSquareAttackedBy(Color.BLACK, Square.F1) ||
-//                        isSquareAttackedBy(Color.BLACK, Square.G1);
-//            } else {
-//                return
-//                        isSquareAttackedBy(Color.BLACK, Square.E1) ||
-//                                isSquareAttackedBy(Color.BLACK, Square.D1) ||
-//                                isSquareAttackedBy(Color.BLACK, Square.C1);
-//            }
-//        } else {
-//            if (castle == Castle.KING) {
-//                return
-//                        isSquareAttackedBy(Color.WHITE, Square.E8) ||
-//                                isSquareAttackedBy(Color.WHITE, Square.F8) ||
-//                                isSquareAttackedBy(Color.WHITE, Square.G8);
-//            } else {
-//                return
-//                        isSquareAttackedBy(Color.WHITE, Square.E8) ||
-//                                isSquareAttackedBy(Color.WHITE, Square.D8) ||
-//                                isSquareAttackedBy(Color.WHITE, Square.C8);
-//            }
-//        }
-//    }
-
 
     public boolean isWhiteCanCastleKingSide() {
         return getCastleEntity().isWhiteCanCastleKingSide();

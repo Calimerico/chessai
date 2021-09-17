@@ -4,6 +4,7 @@ import com.chess.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class CheckRuleMovement {
 
@@ -19,7 +20,7 @@ public class CheckRuleMovement {
         Castle castle = newPosition.getIsLastMoveCastle();
         if (castle == Castle.KING || castle == Castle.QUEEN) {
             if (newPosition.getPlayerToMove() == Color.BLACK) {
-                List<Square> blackAttacking = newPosition.getAttackingSquaresByPlayer(Color.BLACK);
+                Set<Square> blackAttacking = newPosition.getAttackingSquaresByPlayer(Color.BLACK);
                 if (castle == Castle.KING) {
                     isKingInCheckAfterMove = blackAttacking.contains(Square.E1) || blackAttacking.contains(Square.F1) || blackAttacking.contains(Square.G1);
                 } else {
@@ -27,7 +28,7 @@ public class CheckRuleMovement {
 
                 }
             } else {
-                List<Square> whiteAttacking = newPosition.getAttackingSquaresByPlayer(Color.WHITE);
+                Set<Square> whiteAttacking = newPosition.getAttackingSquaresByPlayer(Color.WHITE);
                 if (castle == Castle.KING) {
                     isKingInCheckAfterMove = whiteAttacking.contains(Square.E8) || whiteAttacking.contains(Square.F8) || whiteAttacking.contains(Square.G8);
                 } else {
