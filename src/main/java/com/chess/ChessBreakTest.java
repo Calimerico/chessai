@@ -14,7 +14,7 @@ public class ChessBreakTest implements BreakTest {
     @Override
     public boolean shouldEvaluate(MiniMaxState state, int depth) {
         Position position = (Position) state;
-        if (depth == 0 || position.getActions().isEmpty()) {
+        if (depth == 0 || position.getActionsSize() == 0) {
             return true;
         }
         return false;

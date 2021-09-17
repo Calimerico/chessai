@@ -22,6 +22,8 @@ public class Position implements MiniMaxState {
     Square whiteKingPosition;
     Square blackKingPosition;
     int numberOfPieces;
+    Set<Action> actions;
+    Integer actionsSize;
 
     public Position(
             Map<Square, Piece> pieces,
@@ -53,14 +55,26 @@ public class Position implements MiniMaxState {
 
     @Override
     public Set<Action> getActions() {
-        Set<Action> moves = new TreeSet<>();
-        pieces.values().forEach(piece -> {
-            if (piece.getColor() == playerToMove) {
-                Set<Action> legalMoves = piece.getLegalMoves(this).stream().map(move -> ((Action) move)).collect(Collectors.toSet());
-                moves.addAll(legalMoves);
-            }
-        });
-        return moves;
+        setActions(actions == null);
+        return actions;
+    }
+
+    public int getActionsSize() {
+        setActions(actionsSize == null);
+        return actionsSize;
+    }
+
+    private void setActions(boolean shouldSetActions) {
+        if (shouldSetActions) {
+            actions = new TreeSet<>();
+            pieces.values().forEach(piece -> {
+                if (piece.getColor() == playerToMove) {
+                    Set<Action> legalMoves = piece.getLegalMoves(this).stream().map(move -> ((Action) move)).collect(Collectors.toSet());
+                    actions.addAll(legalMoves);
+                }
+            });
+            actionsSize = actions.size();
+        }
     }
 
     @Override
@@ -115,7 +129,7 @@ public class Position implements MiniMaxState {
         if (InsufficientMaterial.isInsufficient(this)) {
             return 0;
         }
-        if (getActions().isEmpty()) {
+        if (getActionsSize() == 0) {
             if (isKingInCheck()) {
                 if (playerToMove == Color.WHITE) {
                     return -900000;
