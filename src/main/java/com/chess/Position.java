@@ -2,13 +2,10 @@ package com.chess;
 
 import com.ai.Action;
 import com.ai.MiniMaxState;
-import com.ai.State;
 import com.ai.ZobristValue;
 import com.chess.heuristic.HeuristicManager;
 import com.chess.heuristic.InsufficientMaterial;
-import com.chess.moveorder.MoveOrderManager;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,8 +19,8 @@ public class Position implements MiniMaxState {
     Move lastPlayedMove;
     Square whiteKingPosition;
     Square blackKingPosition;
-    Set<Square> attSquaresByBlack;
-    Set<Square> attSquaresByWhite;
+    Map<Square, Integer> attSquaresByBlack;
+    Map<Square, Integer> attSquaresByWhite;
     Set<Action> actions;
     Integer actionsSize;
 
@@ -110,28 +107,32 @@ public class Position implements MiniMaxState {
 
 
     private boolean isKingInCheck() {
-        return getAttackingSquaresByPlayer(playerToMove.opposite()).contains(getKingPosition(playerToMove));
+        return getAttackingSquaresByPlayer(playerToMove.opposite()).containsKey(getKingPosition(playerToMove));
     }
 
 
 
-    public Set<Square> getAttackingSquaresByPlayer(Color color) {
+    public Map<Square, Integer> getAttackingSquaresByPlayer(Color color) {
         if (color == Color.WHITE) {
             if (attSquaresByWhite == null) {
-                attSquaresByWhite = EnumSet.noneOf(Square.class);
+                attSquaresByWhite = new EnumMap<>(Square.class);
                 pieces.values().forEach(piece -> {
-                    if (piece.getColor() == color) {
-                        attSquaresByWhite.addAll(piece.getAttackingSquares(this));
+                    if (piece.getColor() == Color.WHITE) {
+                        piece.getAttackingSquares(this).forEach(square -> {
+                            attSquaresByWhite.merge(square, 1, Integer::sum);
+                        });
                     }
                 });
             }
             return attSquaresByWhite;
         } else {
             if (attSquaresByBlack == null) {
-                attSquaresByBlack = EnumSet.noneOf(Square.class);
+                attSquaresByBlack = new EnumMap<>(Square.class);
                 pieces.values().forEach(piece -> {
-                    if (piece.getColor() == color) {
-                        attSquaresByBlack.addAll(piece.getAttackingSquares(this));
+                    if (piece.getColor() == Color.BLACK) {
+                        piece.getAttackingSquares(this).forEach(square -> {
+                            attSquaresByBlack.merge(square, 1, Integer::sum);
+                        });
                     }
                 });
             }

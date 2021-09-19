@@ -4,6 +4,7 @@ import com.chess.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class CheckRuleMovement {
@@ -14,25 +15,25 @@ public class CheckRuleMovement {
         Position newPosition = position.newState(move);
 
         Piece piece = newPosition.getPieces().get(newPosition.getKingPosition(color));
-        isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color.opposite()).contains(piece.getSquare());
+        isKingInCheckAfterMove = newPosition.getAttackingSquaresByPlayer(color.opposite()).containsKey(piece.getSquare());
 
         //check castle check
         Castle castle = newPosition.getIsLastMoveCastle();
         if (castle == Castle.KING || castle == Castle.QUEEN) {
             if (newPosition.getPlayerToMove() == Color.BLACK) {
-                Set<Square> blackAttacking = newPosition.getAttackingSquaresByPlayer(Color.BLACK);
+                Map<Square, Integer> blackAttacking = newPosition.getAttackingSquaresByPlayer(Color.BLACK);
                 if (castle == Castle.KING) {
-                    isKingInCheckAfterMove = blackAttacking.contains(Square.E1) || blackAttacking.contains(Square.F1) || blackAttacking.contains(Square.G1);
+                    isKingInCheckAfterMove = blackAttacking.containsKey(Square.E1) || blackAttacking.containsKey(Square.F1) || blackAttacking.containsKey(Square.G1);
                 } else {
-                    isKingInCheckAfterMove = blackAttacking.contains(Square.E1) || blackAttacking.contains(Square.D1) || blackAttacking.contains(Square.C1);
+                    isKingInCheckAfterMove = blackAttacking.containsKey(Square.E1) || blackAttacking.containsKey(Square.D1) || blackAttacking.containsKey(Square.C1);
 
                 }
             } else {
-                Set<Square> whiteAttacking = newPosition.getAttackingSquaresByPlayer(Color.WHITE);
+                Map<Square, Integer> whiteAttacking = newPosition.getAttackingSquaresByPlayer(Color.WHITE);
                 if (castle == Castle.KING) {
-                    isKingInCheckAfterMove = whiteAttacking.contains(Square.E8) || whiteAttacking.contains(Square.F8) || whiteAttacking.contains(Square.G8);
+                    isKingInCheckAfterMove = whiteAttacking.containsKey(Square.E8) || whiteAttacking.containsKey(Square.F8) || whiteAttacking.containsKey(Square.G8);
                 } else {
-                    isKingInCheckAfterMove = whiteAttacking.contains(Square.E8) || whiteAttacking.contains(Square.D8) || whiteAttacking.contains(Square.C8);
+                    isKingInCheckAfterMove = whiteAttacking.containsKey(Square.E8) || whiteAttacking.containsKey(Square.D8) || whiteAttacking.containsKey(Square.C8);
 
                 }
             }
