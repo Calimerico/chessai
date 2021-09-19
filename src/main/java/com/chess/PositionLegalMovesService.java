@@ -1,11 +1,8 @@
 package com.chess;
 
-import com.ai.Action;
 import com.chess.movementrules.*;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,33 +10,33 @@ public class PositionLegalMovesService {
 
     public static Set<Move> getLegalMoves(Position position, Square square) {
         Piece piece = position.getPieceAtSquare(square);
-        Set<Move> legalMoves = Collections.emptySet();
+        Set<Move> quaziLegalMoves = Collections.emptySet();
         if (piece != null) {
 
             switch (piece.getPieceType()) {
                 case BISHOP:
-                    legalMoves = BishopRuleMovement.getLegalMoves(position, square);
+                    quaziLegalMoves = BishopRuleMovement.getQuaziLegalMoves(position, square);
                     break;
                 case ROOK:
-                    legalMoves = RookRuleMovement.getLegalMoves(position, square);
+                    quaziLegalMoves = RookRuleMovement.getQuaziLegalMoves(position, square);
                     break;
                 case QUEEN:
-                    legalMoves = QueenRuleMovement.getLegalMoves(position, square);
+                    quaziLegalMoves = QueenRuleMovement.getQuaziLegalMoves(position, square);
                     break;
                 case KNIGHT:
-                    legalMoves = KnightRuleMovement.getLegalMoves(position, square);
+                    quaziLegalMoves = KnightRuleMovement.getQuaziLegalMoves(position, square);
                     break;
                 case PAWN:
-                    legalMoves = PawnRuleMovement.getLegalMoves(position, square);
+                    quaziLegalMoves = PawnRuleMovement.getQuaziLegalMoves(position, square);
                     break;
                 case KING:
-                    legalMoves = KingRuleMovement.getLegalMoves(position, square);
+                    quaziLegalMoves = KingRuleMovement.getQuaziLegalMoves(position, square);
                     break;
                 default:
                     throw new RuntimeException("Piece not recognized!");
             }
         }
-        return legalMoves
+        return quaziLegalMoves
                 .stream()
                 .filter(move -> {
                     Square endingSquare = move.getEndingSquare();
@@ -81,7 +78,7 @@ public class PositionLegalMovesService {
                     PerformanceMonitor.getAttackingSquaresEnd();
                     return attackingSquares4;
                 case KING:
-                    Set<Square> attackingSquares5 = KingRuleMovement.getAttackingSquares(position, square);
+                    Set<Square> attackingSquares5 = KingRuleMovement.getAttackingSquares(square);
                     PerformanceMonitor.getAttackingSquaresEnd();
                     return attackingSquares5;
                 default:

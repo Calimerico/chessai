@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class PawnRuleMovement {
 
 
-    public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
+    public static Set<Move> getQuaziLegalMoves(Position position, Square currentSquare) {
 
         Set<Move> legalMoves = getAttackingSquares(position, currentSquare)
                 .stream()
@@ -113,31 +113,28 @@ public class PawnRuleMovement {
         if (myColor == Color.WHITE) {
             if (file + 1 < 8) {
                 Square endingSquare = Square.calculateSquareFromCoordinates(file + 1, rank + 1);
-                addCaptureIffPossible(position, myColor, attackingSquares, endingSquare);
+                addCaptureIffPossible(attackingSquares, endingSquare);
             }
 
             if (file - 1 >= 0) {
                 Square endingSquare = Square.calculateSquareFromCoordinates(file - 1, rank + 1);
-                addCaptureIffPossible(position, myColor, attackingSquares, endingSquare);
+                addCaptureIffPossible(attackingSquares, endingSquare);
             }
         } else {
             if (file + 1 < 8) {
                 Square endingSquare = Square.calculateSquareFromCoordinates(file + 1, rank - 1);
-                addCaptureIffPossible(position, myColor, attackingSquares, endingSquare);
+                addCaptureIffPossible(attackingSquares, endingSquare);
             }
 
             if (file - 1 >= 0) {
                 Square endingSquare = Square.calculateSquareFromCoordinates(file - 1, rank - 1);
-                addCaptureIffPossible(position, myColor, attackingSquares, endingSquare);
+                addCaptureIffPossible(attackingSquares, endingSquare);
             }
         }
         return attackingSquares;
     }
 
-    private static void addCaptureIffPossible(Position position, Color myColor, Set<Square> attackingSquares, Square endingSquare) {
-        Piece pieceToCapture = position.getPieces().get(endingSquare);
-//        if (pieceToCapture != null && pieceToCapture.getColor() != myColor) {
-            attackingSquares.add(endingSquare);
-//        }
+    private static void addCaptureIffPossible(Set<Square> attackingSquares, Square endingSquare) {
+        attackingSquares.add(endingSquare);
     }
 }

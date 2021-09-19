@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class QueenRuleMovement {
 
-    public static Set<Move> getLegalMoves(Position position, Square currentSquare) {
+    public static Set<Move> getQuaziLegalMoves(Position position, Square currentSquare) {
         return getAttackingSquares(position, currentSquare)
                 .stream()
                 .map(square -> new Move(

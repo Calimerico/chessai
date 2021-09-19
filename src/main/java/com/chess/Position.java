@@ -8,6 +8,7 @@ import com.chess.heuristic.HeuristicManager;
 import com.chess.heuristic.InsufficientMaterial;
 import com.chess.moveorder.MoveOrderManager;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +22,6 @@ public class Position implements MiniMaxState {
     Move lastPlayedMove;
     Square whiteKingPosition;
     Square blackKingPosition;
-    int numberOfPieces;
     Set<Square> attSquaresByBlack;
     Set<Square> attSquaresByWhite;
     Set<Action> actions;
@@ -41,7 +41,6 @@ public class Position implements MiniMaxState {
         this.lastPlayedMove = lastPlayedMove;
         this.whiteKingPosition = calculateKingPosition(whiteKingPositionInPreviousPosition, lastPlayedMove);
         this.blackKingPosition = calculateKingPosition(blackKingPositionInPreviousPosition, lastPlayedMove);
-        this.numberOfPieces = this.pieces.size();
     }
 
     private Square calculateKingPosition(Square kingPositionInPreviousPosition, Move lastPlayedMove) {
@@ -142,7 +141,7 @@ public class Position implements MiniMaxState {
 
     @Override
     public double getHeuristicFunction() {
-        if (InsufficientMaterial.isInsufficient(this)) {
+        if (new InsufficientMaterial().isInsufficient(this)) {
             return 0;
         }
         if (getActionsSize() == 0) {
@@ -169,7 +168,6 @@ public class Position implements MiniMaxState {
                 castleEntity.isWhiteCanCastleKingSide() == position.getCastleEntity().isWhiteCanCastleKingSide() &&
                 castleEntity.isBlackCanCastleQueenSide() == position.getCastleEntity().isBlackCanCastleQueenSide() &&
                 castleEntity.isBlackCanCastleKingSide() == position.getCastleEntity().isBlackCanCastleKingSide() &&
-                numberOfPieces == position.numberOfPieces &&
                 pieces.equals(position.pieces) &&
                 playerToMove == position.playerToMove &&
                 Objects.equals(lastPlayedMove, position.lastPlayedMove) &&
@@ -186,8 +184,7 @@ public class Position implements MiniMaxState {
                 playerToMove,
                 lastPlayedMove,
                 whiteKingPosition,
-                blackKingPosition,
-                numberOfPieces
+                blackKingPosition
         );
     }
 

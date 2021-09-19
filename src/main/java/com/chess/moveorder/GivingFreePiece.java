@@ -13,6 +13,7 @@ public class GivingFreePiece implements MoveOrderService {
         Square startingSquare = move.getStartingSquare();
         double diff = position.getPieceValueOnSquare(endingSquare) - position.getPieceValueOnSquare(startingSquare);
         //if ending square is defended
+        //todo position.getAttackingSquaresByPlayer maybe its actually not defended is piece is under the pin!
         boolean endingSquareDefended = position.getAttackingSquaresByPlayer(position.getPlayerToMove().opposite()).contains(endingSquare);
         if (endingSquareDefended && diff < 0) {
             return (int) (diff*300000);
