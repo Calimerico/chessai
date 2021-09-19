@@ -9,8 +9,8 @@ public class MoveOrderManager {
     private final List<MoveOrderService> moveOrderServices = Arrays.asList(
             new Check(),
             new Takes(),
-            new QueenInTheCenter(),
-            new GivingFreePiece()
+            new QueenInTheCenter()
+//            new GivingFreePiece()
     );
 
     public int getOrder(Move move) {
