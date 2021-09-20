@@ -7,7 +7,7 @@ import com.chess.movementrules.CheckRuleMovement;
 public class Check implements MoveOrderService {
 
     @Override
-    public int getOrder(Move move) {
+    public double getOrder(Move move) {
         Position position = move.getPosition();
         return CheckRuleMovement.isKingInCheckAfterMove(position, move, position.getPlayerToMove().opposite()) ? 50000000 : 0;
     }

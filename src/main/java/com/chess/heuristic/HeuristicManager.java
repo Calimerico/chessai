@@ -6,7 +6,9 @@ import java.util.List;
 
 public class HeuristicManager {
     private final List<Heuristic> heuristics = Arrays.asList(
-            new StaticValue()
+            new StaticValue(),
+            new AttCenterSquares(),
+            new AttSquares()
     );
 
     public double getHeuristic(Position position) {

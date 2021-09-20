@@ -7,7 +7,7 @@ import com.chess.Square;
 public class GivingFreePiece implements MoveOrderService {
 
     @Override
-    public int getOrder(Move move) {
+    public double getOrder(Move move) {
         Position position = move.getPosition();
         Square endingSquare = move.getEndingSquare();
         Square startingSquare = move.getStartingSquare();

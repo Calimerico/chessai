@@ -13,7 +13,7 @@ public class Move implements Action, Comparable<Move> {
     private final Square endingSquare;
     @Getter
     private final Position position;
-    private final int order;//todo
+    private final double order;//todo
     private final boolean isEnPassant;
     private final PieceType promoteTo;
 
@@ -34,10 +34,10 @@ public class Move implements Action, Comparable<Move> {
 
     @Override
     public int compareTo(Move move) {
-        return Integer.compare(move.getOrder(), order);
+        return Double.compare(move.getOrder(), order);
     }
 
-    public int getOrder() {
+    public double getOrder() {
         return order;
     }
 

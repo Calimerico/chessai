@@ -8,7 +8,7 @@ import com.chess.Square;
 public class QueenInTheCenter implements MoveOrderService {
 
     @Override
-    public int getOrder(Move move) {
+    public double getOrder(Move move) {
         Position position = move.getPosition();
         if (position.getPieceAtSquare(move.getStartingSquare()).getPieceType() == PieceType.QUEEN) {
             if (move.getEndingSquare().isNarrowCenter()) {
